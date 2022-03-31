@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/03/31 15:23:18 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/03/31 15:48:21 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <readline/history.h>
 
 // Signal handling function
-void	sig_handle(int signo, siginfo_t *info, void *other)
+static void	sig_handle(int signo, siginfo_t *info, void *other)
 {
 	(void)info;
 	(void)other;
@@ -32,37 +32,42 @@ void	sig_handle(int signo, siginfo_t *info, void *other)
 		return ;
 	}
 	if (signo == SIGQUIT)
-	{
 		return ;
-	}
-	exit(1);
-	return ;
 }
 
-int	main(int argc, char **argv, char **envp)
+// Initial terminal attribute
+// Not echo ctrl command
+static void	init_term(struct termios term)
 {
-	char	*line;
-	struct sigaction	sa;
-	struct termios term;
-
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	// Setting Terminal not echo signal ctrl
 	tcgetattr(fileno(stdin), &term);
 	term.c_lflag &= ~ECHOCTL;
 	tcsetattr(fileno(stdin), 0, &term);
+}
 
-	// Signal Control Process
+// Initial signal handler
+static void	init_signal(void)
+{
+	struct sigaction	sa;
+
 	sa.sa_sigaction = sig_handle;
 	sa.sa_flags = SA_SIGINFO;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
-	// Initialise global struct
-	// Main process
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	char				*line;
+	struct termios		term;
+
+	(void)argc;
+	(void)argv;
+	(void)envp;
+	//info = init_info(envp);
+	init_term(term);
+	init_signal();
 	while (1)
 	{
-		// Prompt readline to get user input
 		line = readline("hello: ");
 		if (!line)
 		{
@@ -72,9 +77,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (line[0] != '\0')
 		{
-			// Add user input to an history
 			add_history(line);
-			// Execute user input
 			//execute_line(line);
 		}
 		free(line);
