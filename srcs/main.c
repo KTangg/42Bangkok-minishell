@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/03/31 15:48:21 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/03/31 18:28:46 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static void	sig_handle(int signo, siginfo_t *info, void *other)
 {
 	(void)info;
 	(void)other;
-
 	if (signo == SIGINT)
 	{
 		rl_on_new_line();
@@ -33,6 +32,15 @@ static void	sig_handle(int signo, siginfo_t *info, void *other)
 	}
 	if (signo == SIGQUIT)
 		return ;
+}
+
+// Exiting Shell via CTRL + D
+static void	shell_exit(void)
+{
+	rl_clear_history();
+	printf("\n");
+	// Free global struct
+	exit(0);
 }
 
 // Initial terminal attribute
@@ -70,11 +78,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		line = readline("hello: ");
 		if (!line)
-		{
-			rl_clear_history();
-			printf("\n");
-			exit(0);
-		}
+			shell_exit();
 		if (line[0] != '\0')
 		{
 			add_history(line);
