@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+         #
+#    By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 14:53:45 by spoolpra          #+#    #+#              #
-#    Updated: 2022/03/31 15:24:47 by spoolpra         ###   ########.fr        #
+#    Updated: 2022/03/31 21:24:36 by tratanat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,16 +16,18 @@ RM = rm -rf
 
 SRC_DIR = srcs/
 OBJ_DIR = objs/
+LIB_DIR = libft/
 
-INCS = -Iincludes/ -I$(LIB_DIR)includes/
+INCS = -Iincludes/ -I$(LIB_DIR)
 NAME = minishell
-SRCS = main.c
+SRCS = main.c ms_input.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(addprefix $(OBJ_DIR),$(OBJS))
-	$(CC) $^ -o $(NAME) -lreadline
+	$(MAKE) -C $(LIB_DIR)
+	$(CC) $(INCS) $^ -o $(NAME) -lreadline -L$(LIB_DIR) -lft
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< $(INCS) -o $@

@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/03/31 18:28:46 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/03/31 19:17:55 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <termios.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "minishell.h"
 
 // Signal handling function
 static void	sig_handle(int signo, siginfo_t *info, void *other)
@@ -35,7 +30,7 @@ static void	sig_handle(int signo, siginfo_t *info, void *other)
 }
 
 // Exiting Shell via CTRL + D
-static void	shell_exit(void)
+void	shell_exit(void)
 {
 	rl_clear_history();
 	printf("\n");
@@ -65,8 +60,9 @@ static void	init_signal(void)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char				*line;
 	struct termios		term;
+	char				*line;
+	char				*prompt;
 
 	(void)argc;
 	(void)argv;
@@ -76,7 +72,8 @@ int	main(int argc, char **argv, char **envp)
 	init_signal();
 	while (1)
 	{
-		line = readline("hello: ");
+		prompt = getprompt();
+		line = readline(prompt);
 		if (!line)
 			shell_exit();
 		if (line[0] != '\0')
@@ -85,5 +82,7 @@ int	main(int argc, char **argv, char **envp)
 			//execute_line(line);
 		}
 		free(line);
+		free(prompt);
 	}
+	shell_exit();
 }
