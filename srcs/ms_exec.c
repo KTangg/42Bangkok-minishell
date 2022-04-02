@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 18:04:16 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/02 11:01:54 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/02 11:02:49 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*check_path(char *cmd)
 	{
 		path = path_join(path_env[i++], cmd);
 		if (path == NULL)
-			continue;
+			continue ;
 		if (!access(path, F_OK) && !access(path, X_OK))
 		{
 			free(path_env);
