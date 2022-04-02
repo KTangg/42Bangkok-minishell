@@ -6,11 +6,13 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/01 02:11:18 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/02 12:11:05 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_ms_vars	*g_msvars;
 
 // Signal handling function
 static void	sig_handle(int signo, siginfo_t *info, void *other)
@@ -66,8 +68,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	(void)envp;
 	//info = init_info(envp);
+	g_msvars = init_global(envp);
 	init_term(term);
 	init_signal();
 	while (1)

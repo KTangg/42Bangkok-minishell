@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 09:41:08 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/02 12:05:29 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,19 @@ typedef struct s_command {
 	struct s_command	*next;
 }	t_command;
 
+typedef struct s_vars {
+	char			*index;
+	char			*value;
+	struct s_vars	*next;
+}	t_vars;
+
+typedef struct s_ms_vars {
+	int		exit_status;
+	char	**environ;
+	t_vars	**env_lst;
+	t_vars	**var_lst;
+}	t_ms_vars;
+
 char		*getprompt(void);
 void		shell_exit(void);
 char		**split_args(const char *line, int len);
@@ -44,5 +57,8 @@ t_command	*parse_seqcmds(const char *line);
 int			execute_line(char *line);
 int			isredir(const char c);
 int			getcmdlen(const char *line, int *pos);
+t_ms_vars	*init_global(char **envp);
+void		app_var(t_vars **lst, char *line);
+void		print_varlist(t_vars **lst);
 
 #endif
