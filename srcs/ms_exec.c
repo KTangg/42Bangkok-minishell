@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 18:04:16 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/02 10:55:23 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/02 11:01:54 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <string.h>
 #include <sys/wait.h>
 
+// Get path in environment variable
 char	**get_path_env(void)
 {
 	char	**path_env;
@@ -26,6 +27,7 @@ char	**get_path_env(void)
 	return (path_env);
 }
 
+// Join path with the command
 char	*path_join(char *prefix, char *suffix)
 {
 	char	*path;
@@ -48,6 +50,7 @@ char	*path_join(char *prefix, char *suffix)
 	return (path);
 }
 
+// Checking access to file in every path
 char	*check_path(char *cmd)
 {
 	char	*path;
@@ -73,6 +76,7 @@ char	*check_path(char *cmd)
 	return (NULL);
 }
 
+// Find path and execute right executable file
 void	execute(char *argv[])
 {
 	pid_t	pid;
