@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 00:03:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 11:13:06 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/02 13:00:53 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ static int	getargc(const char *line, int len)
 		}
 		i++;
 	}
-	if ((i == len || !line[i]) && line[i - 1] != ' ' && i > 0)
-		argc++;
+	argc += ((i == len || !line[i]) && line[i - 1] != ' ' && i > 0);
 	return (argc);
 }
 
@@ -85,23 +84,12 @@ static char	*getargv(const char *line, int len, int *offset)
 	arg_off = 0;
 	while (line[*offset] && *offset < len)
 	{
-		if (line[*offset] == '\"' && !sq_open)
-		{
-			dq_open = !dq_open;
+		if (isquoting(line[*offset], &sq_open, &dq_open))
 			arg_off--;
-		}
-		else if (line[*offset] == '\'' && !dq_open)
-		{
-			sq_open = !sq_open;
-			arg_off--;
-		}
 		else if (line[*offset] == ' ' && !sq_open && !dq_open)
 		{
 			while (line[*offset] == ' ')
-			{
-				(*offset)++;
-				arg_off--;
-			}
+				arg_off -= !!((*offset)++);
 			break ;
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 12:05:29 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/02 18:08:03 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,15 @@ char		*getprompt(void);
 void		shell_exit(void);
 char		**split_args(const char *line, int len);
 int			checkredir(const char *line, int len);
-t_command	*parse_seqcmds(const char *line);
+t_command	*parse_seqcmds(char *line);
 int			execute_line(char *line);
 int			isredir(const char c);
 int			getcmdlen(const char *line, int *pos);
 t_ms_vars	*init_global(char **envp);
 void		app_var(t_vars **lst, char *line);
 void		print_varlist(t_vars **lst);
+int			isquoting(char c, int *sq_open, int *dq_open);
+char		*expand_var(char *line);
+int			validvarn(char c, int pos);
 
 #endif

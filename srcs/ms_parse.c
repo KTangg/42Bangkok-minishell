@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:37 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 10:09:22 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/02 14:15:56 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,16 @@ static t_command	*split_redir(t_command *cmdlist, const char *line);
 static int			getredir(const char *line, int *offset);
 
 // Split
-t_command	*parse_seqcmds(const char *line)
+t_command	*parse_seqcmds(char *line)
 {
 	t_command	*cmdlist;
+	char		*exp_cmd;
 
-	cmdlist = split_redir(NULL, line);
+	exp_cmd = expand_var(ft_strdup(line));
+	cmdlist = split_redir(NULL, exp_cmd);
 	if (!cmdlist)
 		return (NULL);
+	free(exp_cmd);
 	return (cmdlist);
 }
 
