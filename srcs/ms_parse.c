@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:37 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/01 04:06:15 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/02 10:09:22 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,7 @@ static t_command	*split_redir(t_command *cmdlist, const char *line)
 		return (NULL);
 	cmd->redirection = getredir(line, &offset);
 	i += offset;
-	while (line[i] && !isredir(line[i]))
-	{
-		i++;
-		cmd_len++;
-	}
+	cmd_len += getcmdlen(line, &i);
 	cmd->command = split_args(line + offset, cmd_len);
 	if (!cmdlist)
 		cmd->next = NULL;
@@ -105,17 +101,5 @@ int	checkredir(const char *line, int len)
 		else
 			printf("minishell: syntax error near unexpected token `%c\'\n", line[1]);
 	}
-	return (0);
-}
-
-int	isredir(const char c)
-{
-	const char	redir[4] = "><|&";
-	int			i;
-
-	i = 0;
-	while (i < 4)
-		if (c == redir[i++])
-			return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 00:03:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/01 10:44:05 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/02 11:13:06 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	**split_args(const char *line, int len)
 	char	**output;
 	int		offset;
 	int		arg_set;
-	char	*temp;
 
 	offset = 0;
 	arg_set = 0;
@@ -37,9 +36,6 @@ char	**split_args(const char *line, int len)
 		output[arg_set] = getargv(line, len, &offset);
 		if (!output[arg_set])
 			return (NULL);
-		temp = output[arg_set];
-		output[arg_set] = ft_strtrim(output[arg_set], " ");
-		free(temp);
 		arg_set++;
 	}
 	output[argc] = NULL;
@@ -50,16 +46,20 @@ static int	getargc(const char *line, int len)
 {
 	int	i;
 	int	argc;
-	int	quote_open;
+	int	sq_open;
+	int	dq_open;
 
 	i = 0;
 	argc = 0;
-	quote_open = 0;
+	sq_open = 0;
+	dq_open = 0;
 	while (line[i] && i < len)
 	{
-		if (line[i] == '\"')
-			quote_open = !quote_open;
-		else if (line[i] == ' ' && quote_open != 1)
+		if (line[i] == '\"' && !sq_open)
+			dq_open = !dq_open;
+		if (line[i] == '\'' && !dq_open)
+			sq_open = !sq_open;
+		else if (line[i] == ' ' && !sq_open && !dq_open)
 		{
 			while (line[i + 1] == ' ')
 				i++;
@@ -74,18 +74,28 @@ static int	getargc(const char *line, int len)
 
 static char	*getargv(const char *line, int len, int *offset)
 {
-	int		quote_open;
-	int		arg_len;
-	int		arg_off;
+	int	sq_open;
+	int	dq_open;
+	int	arg_len;
+	int	arg_off;
 
 	arg_len = 0;
-	quote_open = 0;
+	sq_open = 0;
+	dq_open = 0;
 	arg_off = 0;
 	while (line[*offset] && *offset < len)
 	{
-		if (line[*offset] == '\"')
-			quote_open = !quote_open;
-		else if (line[*offset] == ' ' && !quote_open)
+		if (line[*offset] == '\"' && !sq_open)
+		{
+			dq_open = !dq_open;
+			arg_off--;
+		}
+		else if (line[*offset] == '\'' && !dq_open)
+		{
+			sq_open = !sq_open;
+			arg_off--;
+		}
+		else if (line[*offset] == ' ' && !sq_open && !dq_open)
 		{
 			while (line[*offset] == ' ')
 			{
@@ -94,9 +104,9 @@ static char	*getargv(const char *line, int len, int *offset)
 			}
 			break ;
 		}
-		(*offset)++;
-		if (line[*offset] != '\"')
+		else
 			arg_len++;
+		(*offset)++;
 	}
 	return (skipquote(line + arg_off + *offset - arg_len, arg_len));
 }
@@ -105,19 +115,37 @@ static char	*skipquote(const char *str, int len)
 {
 	char	*output;
 	int		i;
+	int		sq_open;
+	int		dq_open;
 
 	i = 0;
+	sq_open = 0;
+	dq_open = 0;
 	output = (char *)malloc((len + 1) * sizeof(char));
 	if (!output)
 		return (NULL);
 	while (i < len)
 	{
-		if (*str != '\"')
-		{
+		if (*str == '\"' && !sq_open)
+			dq_open = !dq_open;
+		else if (*str == '\'' && !dq_open)
+			sq_open = !sq_open;
+		else
 			output[i++] = *str;
-		}
 		str++;
 	}
 	output[i] = '\0';
 	return (output);
+}
+
+int	isredir(const char c)
+{
+	const char	redir[4] = "><|&";
+	int			i;
+
+	i = 0;
+	while (i < 4)
+		if (c == redir[i++])
+			return (1);
+	return (0);
 }

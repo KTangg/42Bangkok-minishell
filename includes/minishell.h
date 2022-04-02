@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/01 04:06:07 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/02 09:41:08 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ int			checkredir(const char *line, int len);
 t_command	*parse_seqcmds(const char *line);
 int			execute_line(char *line);
 int			isredir(const char c);
+int			getcmdlen(const char *line, int *pos);
 
 #endif

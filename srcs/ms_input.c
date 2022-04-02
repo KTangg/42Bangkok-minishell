@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:39:27 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/01 04:10:41 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/02 11:13:43 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	execute_line(char *line)
 		printf("[Command %i] - ", i++);
 		while ((temp->command)[j])
 		{
-			printf("[%i] %s ", j, (temp->command)[j]);
+			printf("[%i] [%s] ", j, (temp->command)[j]);
 			free(temp->command[j]);
 			j++;
 		}
