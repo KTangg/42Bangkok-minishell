@@ -1,3 +1,4 @@
 test.c
 minishell
 objs
+test*
