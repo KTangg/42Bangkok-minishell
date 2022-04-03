@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 12:13:38 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 15:48:15 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define REPIPE 5
 # define REAND 6
 # define REOR 7
+# define HERE_DOCFILE "here_doc.txt"
 
 // Outmode. 0 - Do nothing; 1 - > to file; 2 - >> to file;
 typedef struct s_command {
@@ -52,12 +53,19 @@ typedef struct s_ms_vars {
 	t_vars	**var_lst;
 }	t_ms_vars;
 
+// Get Prompt for Readline Prototype
 char		*getprompt(void);
-void		shell_exit(void);
+
+// Line Process Prototype
+int			shell_line(char *line);
+
+// Execute Process Prototype
+void		execute(char *argv[]);
+
+// Split Process Prototype
 char		**split_args(const char *line, int len);
 int			checkredir(const char *line, int len);
 t_command	*parse_seqcmds(char *line);
-int			execute_line(char *line);
 int			isredir(const char c);
 int			getcmdlen(const char *line, int *pos);
 t_ms_vars	*init_global(char **envp);
@@ -71,5 +79,18 @@ void		setvar(char *cmd);
 int			isvarset(char *cmd);
 char		**lst_delcmd(t_command *cmdlist, char *cmd);
 t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur);
+
+// Redirection Prototype
+void		redir_out(t_command *command_line);
+void		redir_app(t_command *command_line);
+void		redir_inp(t_command *command_line);
+void		here_document(t_command *command_line);
+
+// Pipe Prototype
+void		redir_pipe(t_command *command_line);
+
+// Section Command Prototype
+void		section_execute(t_command *cmd_section);
+t_command	**section_cmd(t_command *command_line);
 
 #endif
