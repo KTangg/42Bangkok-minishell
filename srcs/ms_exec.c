@@ -6,15 +6,12 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 18:04:16 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/02 11:02:49 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/03 14:57:51 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
 #include <sys/wait.h>
+#include "minishell.h"
 
 // Get path in environment variable
 char	**get_path_env(void)
@@ -41,7 +38,7 @@ char	*path_join(char *prefix, char *suffix)
 	path = (char *)malloc(sizeof(char) * size);
 	if (path == NULL)
 	{
-		printf("malloc: Allocation error\n");
+		ft_putendl_fd("malloc: allocation failed", STDERR_FILENO);
 		return (NULL);
 	}
 	ft_memcpy(path, prefix, n_pre);
@@ -71,7 +68,8 @@ char	*check_path(char *cmd)
 		}
 		free(path);
 	}
-	printf("%s: command not found\n", cmd);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putendl_fd(": command not found", STDERR_FILENO);
 	free(path_env);
 	return (NULL);
 }
@@ -79,7 +77,7 @@ char	*check_path(char *cmd)
 // Find path and execute right executable file
 void	execute(char *argv[])
 {
-	pid_t	pid;
+	//pid_t	pid;
 	char	*cmd;
 	char	*path;
 
@@ -89,17 +87,6 @@ void	execute(char *argv[])
 	path = check_path(cmd);
 	if (path == NULL)
 		return ;
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		free(path);
-		return ;
-	}
-	if (pid == 0)
-	{
-		execve(path, argv, NULL);
-		perror(cmd);
-	}
-	free(path);
+	execve(path, argv, NULL);
+	perror(path);
 }
