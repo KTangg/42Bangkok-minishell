@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_input.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:39:27 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 11:59:11 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 15:45:44 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*getprompt(void)
 	return (ft_strdup(prompt));
 }
 
-int	execute_line(char *line)
+/*int	execute_line(char *line)
 {
 	t_command	*cmdlist;
 	t_command	*temp;
@@ -65,4 +65,4 @@ int	execute_line(char *line)
 		free(clean);
 	}
 	return (0);
-}
+}*/
