@@ -6,16 +6,13 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 21:21:04 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/03 15:13:58 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/03 15:41:42 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <sys/wait.h>
 #include "minishell.h"
-
-void	execute(char *argv[]);
-void	redirect(t_command *command_line);
 
 void	hr_doc_input(char *end, int fd)
 {
