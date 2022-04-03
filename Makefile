@@ -6,7 +6,7 @@
 #    By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 14:53:45 by spoolpra          #+#    #+#              #
-#    Updated: 2022/04/02 13:38:52 by tratanat         ###   ########.fr        #
+#    Updated: 2022/04/03 09:23:34 by tratanat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ LIB_DIR = libft/
 
 INCS = -Iincludes/ -I$(LIB_DIR)
 NAME = minishell
-SRCS = main.c ms_input.c ms_parse.c ms_parse_utils.c ms_parse_utils2.c ms_vars.c ms_parse_vars.c
+SRCS = main.c ms_input.c ms_parse.c ms_parse_utils.c ms_parse_utils2.c ms_vars.c ms_parse_vars.c \
+		ms_vars_set.c ms_parse_check.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)

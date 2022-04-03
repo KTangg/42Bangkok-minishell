@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:15:11 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 18:17:50 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 10:59:11 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,14 @@ static char	*findvar(char *varname)
 	temp = *(g_msvars->env_lst);
 	while (temp)
 	{
-		if (!ft_strncmp(temp->index, varname, ft_strlen(varname)))
+		if (!ft_strcmp(temp->index, varname))
 			return (temp->value);
 		temp = temp->next;
 	}
 	temp = *(g_msvars->var_lst);
 	while (temp)
 	{
-		if (!ft_strncmp(temp->index, varname, ft_strlen(varname)))
+		if (!ft_strcmp(temp->index, varname))
 			return (temp->value);
 		temp = temp->next;
 	}

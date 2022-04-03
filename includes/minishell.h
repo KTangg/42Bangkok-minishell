@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 18:08:03 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 09:25:10 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,12 @@
 # define REAND 6
 # define REOR 7
 
+// Outmode. 0 - Do nothing; 1 - > to file; 2 - >> to file;
 typedef struct s_command {
 	int					redirection;
 	char				**command;
+	char				*fileout;
+	int					outmode;
 	struct s_command	*next;
 }	t_command;
 
@@ -63,5 +66,9 @@ void		print_varlist(t_vars **lst);
 int			isquoting(char c, int *sq_open, int *dq_open);
 char		*expand_var(char *line);
 int			validvarn(char c, int pos);
+int			checkcmdlst(t_command *cmdlist);
+void		setvar(char *cmd);
+int			isvarset(char *cmd);
+char		**lst_delcmd(t_command *cmdlist, char *cmd);
 
 #endif

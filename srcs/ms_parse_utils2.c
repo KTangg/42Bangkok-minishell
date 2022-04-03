@@ -6,11 +6,13 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 09:40:40 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 17:59:54 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 10:58:53 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	lst_relist(char **oldlst, char **newlst, int pos, int size);
 
 int	getcmdlen(const char *line, int *pos)
 {
@@ -55,8 +57,52 @@ int	validvarn(char c, int pos)
 	{
 		if (pos == 0)
 			return (0);
-		if (pos == 1 && !(c >= '0' && c <= '9'))
+		if (pos > 0 && !(c >= '0' && c <= '9'))
 			return (0);
 	}
 	return (1);
+}
+
+char	**lst_delcmd(t_command *cmdlist, char *cmd)
+{
+	int			i;
+	int			arr_size;
+	char		**newlst;
+
+	i = 0;
+	arr_size = 0;
+	while ((cmdlist->command)[arr_size])
+		arr_size++;
+	while (ft_strcmp(cmdlist->command[i], cmd))
+		i++;
+	if (!ft_strcmp(cmdlist->command[i], cmd))
+	{
+		newlst = (char **)malloc(arr_size * sizeof(char *));
+		lst_relist(cmdlist->command, newlst, i, arr_size);
+		free(cmdlist->command[i]);
+		free(cmdlist->command);
+		return (newlst);
+	}
+	return (cmdlist->command);
+}
+
+static void	lst_relist(char **oldlst, char **newlst, int pos, int size)
+{
+	int	i;
+
+	i = 0;
+	if (size == 1)
+	{
+		newlst[0] = NULL;
+		return ;
+	}
+	while (i < pos)
+	{
+		newlst[i] = oldlst[i];
+		i++;
+	}
+	pos++;
+	while (oldlst[pos])
+		newlst[i++] = oldlst[pos++];
+	newlst[i] = '\0';
 }

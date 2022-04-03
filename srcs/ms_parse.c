@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:37 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 14:15:56 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 11:03:00 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ static int			getredir(const char *line, int *offset);
 t_command	*parse_seqcmds(char *line)
 {
 	t_command	*cmdlist;
-	char		*exp_cmd;
 
-	exp_cmd = expand_var(ft_strdup(line));
-	cmdlist = split_redir(NULL, exp_cmd);
+	cmdlist = split_redir(NULL, line);
 	if (!cmdlist)
 		return (NULL);
-	free(exp_cmd);
+	if (!checkcmdlst(cmdlist))
+		return (NULL);
+	printf("done parsing\n");
 	return (cmdlist);
 }
 
