@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/02 12:11:05 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 15:51:18 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	shell_exit(void)
 {
 	rl_clear_history();
 	printf("\n");
-	// Free global struct
 	exit(0);
 }
 
@@ -56,6 +55,7 @@ static void	init_signal(void)
 
 	sa.sa_sigaction = sig_handle;
 	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 }
@@ -68,7 +68,6 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	//info = init_info(envp);
 	g_msvars = init_global(envp);
 	init_term(term);
 	init_signal();
@@ -81,8 +80,9 @@ int	main(int argc, char **argv, char **envp)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			execute_line(line);
+			shell_line(line);
 		}
+		unlink(HERE_DOCFILE);
 		free(line);
 		free(prompt);
 	}
