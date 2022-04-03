@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:39:27 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 10:52:44 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 11:59:11 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ int	execute_line(char *line)
 	t_command	*clean;
 
 	i = 0;
-	j = 0;
 	cmdlist = parse_seqcmds(line);
 	if (!cmdlist)
 		return (-1);
 	temp = cmdlist;
 	while (temp)
 	{
+		j = 0;
 		printf("[Command %i] - ", i++);
 		while ((temp->command)[j])
 		{
@@ -58,8 +58,8 @@ int	execute_line(char *line)
 			j++;
 		}
 		free(temp->command);
-		j = 0;
-		printf(" - Redirection: %i\n", temp->redirection);
+		printf(" - Redirection: %i ", temp->redirection);
+		printf("File out: %s Mode: %i\n", temp->fileout, temp->outmode);
 		clean = temp;
 		temp = temp->next;
 		free(clean);

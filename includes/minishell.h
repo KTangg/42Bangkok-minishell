@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 09:25:10 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 12:13:38 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,10 @@ void		print_varlist(t_vars **lst);
 int			isquoting(char c, int *sq_open, int *dq_open);
 char		*expand_var(char *line);
 int			validvarn(char c, int pos);
-int			checkcmdlst(t_command *cmdlist);
+t_command	*checkcmdlst(t_command *cmdlist);
 void		setvar(char *cmd);
 int			isvarset(char *cmd);
 char		**lst_delcmd(t_command *cmdlist, char *cmd);
+t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur);
 
 #endif

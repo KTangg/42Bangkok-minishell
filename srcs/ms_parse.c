@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:37 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 11:03:00 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 12:05:32 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ t_command	*parse_seqcmds(char *line)
 	cmdlist = split_redir(NULL, line);
 	if (!cmdlist)
 		return (NULL);
-	if (!checkcmdlst(cmdlist))
-		return (NULL);
-	printf("done parsing\n");
-	return (cmdlist);
+	return (checkcmdlst(cmdlist));
 }
 
 static t_command	*split_redir(t_command *cmdlist, const char *line)
@@ -45,6 +42,8 @@ static t_command	*split_redir(t_command *cmdlist, const char *line)
 	if (!cmd)
 		return (NULL);
 	cmd->redirection = getredir(line, &offset);
+	cmd->fileout = NULL;
+	cmd->outmode = 0;
 	i += offset;
 	cmd_len += getcmdlen(line, &i);
 	cmd->command = split_args(line + offset, cmd_len);
