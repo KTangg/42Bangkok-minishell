@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 15:48:15 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/03 16:19:56 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define REOR 7
 # define HERE_DOCFILE "here_doc.txt"
 
-// Outmode. 0 - Do nothing; 1 - > to file; 2 - >> to file;
+// Outmode: 0 - Do nothing; 1 - > to file; 2 - >> to file;
 typedef struct s_command {
 	int					redirection;
 	char				**command;
@@ -53,7 +53,14 @@ typedef struct s_ms_vars {
 	t_vars	**var_lst;
 }	t_ms_vars;
 
-// Get Prompt for Readline Prototype
+// Logic: 0 - Execute; 1 - AND; 2 - OR;
+typedef struct s_cmdset {
+	struct s_cmdset	*cmdset1;
+	struct s_cmdset	*cmdset2;
+	t_command		*command;
+	int				logic;
+}	t_cmdset;
+
 char		*getprompt(void);
 
 // Line Process Prototype

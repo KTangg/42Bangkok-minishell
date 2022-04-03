@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:15:11 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 10:59:11 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/03 12:59:52 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,23 @@ char	*expand_var(char *line)
 
 static int	getvarlen(char *line, int dq_open)
 {
-	int	i;
 	int	varlen;
 
-	i = 0;
 	varlen = 0;
-	while (!(line[varlen] == ' ') && line[i + varlen] && !dq_open)
+	while (!(line[varlen] == ' ') && line[varlen] && !dq_open)
 	{
 		if (!validvarn(line[varlen], 1))
 			break ;
 		varlen++;
 	}
-	while (!(line[varlen] == '\"') && line[i + varlen] && dq_open)
+	if (dq_open)
 	{
-		if (!validvarn(line[varlen], 1))
-			break ;
-		varlen++;
+		while (!(line[varlen] == '\"' || line[varlen] == ' ') && line[varlen])
+		{
+			if (!validvarn(line[varlen], 1))
+				break ;
+			varlen++;
+		}
 	}
 	return (varlen);
 }
