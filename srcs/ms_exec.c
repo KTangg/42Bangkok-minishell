@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 18:04:16 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/03 14:57:51 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/03 15:36:43 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ char	*check_path(char *cmd)
 // Find path and execute right executable file
 void	execute(char *argv[])
 {
-	//pid_t	pid;
 	char	*cmd;
 	char	*path;
 
@@ -89,4 +88,5 @@ void	execute(char *argv[])
 		return ;
 	execve(path, argv, NULL);
 	perror(path);
+	exit(2);
 }
