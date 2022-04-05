@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 00:03:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 13:00:53 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/05 09:10:29 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,18 @@ static int	getargc(const char *line, int len)
 	int	argc;
 	int	sq_open;
 	int	dq_open;
+	int	p_open;
 
 	i = 0;
 	argc = 0;
 	sq_open = 0;
 	dq_open = 0;
+	p_open = 0;
 	while (line[i] && i < len)
 	{
-		if (line[i] == '\"' && !sq_open)
-			dq_open = !dq_open;
-		if (line[i] == '\'' && !dq_open)
-			sq_open = !sq_open;
-		else if (line[i] == ' ' && !sq_open && !dq_open)
+		if (isquoting(line[i], &sq_open, &dq_open, &p_open))
+			;
+		else if (line[i] == ' ' && !sq_open && !dq_open && !p_open)
 		{
 			while (line[i + 1] == ' ')
 				i++;
@@ -77,23 +77,26 @@ static char	*getargv(const char *line, int len, int *offset)
 	int	dq_open;
 	int	arg_len;
 	int	arg_off;
+	int	p_open;
 
 	arg_len = 0;
 	sq_open = 0;
 	dq_open = 0;
 	arg_off = 0;
+	p_open = 0;
 	while (line[*offset] && *offset < len)
 	{
-		if (isquoting(line[*offset], &sq_open, &dq_open))
+		if (isquoting(line[*offset], &sq_open, &dq_open, &p_open) && !p_open)
 			arg_off--;
-		else if (line[*offset] == ' ' && !sq_open && !dq_open)
+		else if (line[*offset] == ' ' && !sq_open && !dq_open && !p_open)
 		{
 			while (line[*offset] == ' ')
 				arg_off -= !!((*offset)++);
 			break ;
 		}
-		else
-			arg_len++;
+		else if (!(p_open == 0 && line[*offset] == ')'))
+			if (!(p_open == 1 && line[*offset] == '('))
+				arg_len++;
 		(*offset)++;
 	}
 	return (skipquote(line + arg_off + *offset - arg_len, arg_len));
@@ -105,21 +108,22 @@ static char	*skipquote(const char *str, int len)
 	int		i;
 	int		sq_open;
 	int		dq_open;
+	int		p_open;
 
 	i = 0;
 	sq_open = 0;
 	dq_open = 0;
+	p_open = 0;
 	output = (char *)malloc((len + 1) * sizeof(char));
 	if (!output)
 		return (NULL);
 	while (i < len)
 	{
-		if (*str == '\"' && !sq_open)
-			dq_open = !dq_open;
-		else if (*str == '\'' && !dq_open)
-			sq_open = !sq_open;
-		else
-			output[i++] = *str;
+		if (isquoting(output[i], &sq_open, &dq_open, &p_open) < 3 && p_open)
+			;
+		else if (!(!p_open && output[i] == ')') || !(p_open == 1 && output[i] == '('))
+			if (!(output[i] == ' ' && !sq_open && !dq_open && !p_open))
+				output[i++] = *str;
 		str++;
 	}
 	output[i] = '\0';

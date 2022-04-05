@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 09:40:40 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 10:58:53 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/05 08:02:06 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,49 @@
 
 static void	lst_relist(char **oldlst, char **newlst, int pos, int size);
 
-int	getcmdlen(const char *line, int *pos)
+int	getcmdlen(const char *line, int *pos, int *recursive)
 {
 	int	sq_open;
 	int	dq_open;
 	int	cmd_len;
+	int	p_open;
 
 	sq_open = 0;
 	dq_open = 0;
 	cmd_len = 0;
-	while (line[*pos] && (!isredir(line[*pos]) || sq_open == 1 || dq_open == 1))
+	p_open = 0;
+	while (line[*pos] && ((!isredir(line[*pos]) && !p_open) || sq_open || dq_open || p_open))
 	{
-		if (line[*pos] == '\'' && dq_open != 1)
-			sq_open = !sq_open;
-		else if (line[*pos] == '\"' && sq_open != 1)
-			dq_open = !dq_open;
-		(*pos)++;
+		isquoting(line[*pos], &sq_open, &dq_open, &p_open);
 		cmd_len++;
+		(*pos)++;
+		if (p_open)
+			*recursive = 1;
 	}
+	if (!(line[*pos]) && p_open)
+		return (-1);
 	return (cmd_len);
 }
 
 // Return >0 if opening/closing quotes; 1 = single quotes; 2 = double quotes;
-int	isquoting(char c, int *sq_open, int *dq_open)
+int	isquoting(char c, int *sq_open, int *dq_open, int *p_open)
 {
-	if (c == '\'' && !(*dq_open))
+	if (c == '(' && !(*sq_open) && !(*dq_open))
+	{
+		(*p_open)++;
+		return (3);
+	}
+	else if ( c == ')' && !(*sq_open) && !(*dq_open))
+	{
+		(*p_open)--;
+		return (3);
+	}
+	else if (c == '\'' && !(*dq_open) && !(*p_open))
 	{
 		*sq_open = !(*sq_open);
 		return (1);
 	}
-	else if (c == '\"' && !(*sq_open))
+	else if (c == '\"' && !(*sq_open) && !(*p_open))
 	{
 		*dq_open = !(*dq_open);
 		return (2);

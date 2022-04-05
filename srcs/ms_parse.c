@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:37 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 12:05:32 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/05 08:09:25 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,9 @@ static t_command	*split_redir(t_command *cmdlist, const char *line)
 	cmd->redirection = getredir(line, &offset);
 	cmd->fileout = NULL;
 	cmd->outmode = 0;
+	cmd->recursive = 0;
 	i += offset;
-	cmd_len += getcmdlen(line, &i);
+	cmd_len += getcmdlen(line, &i, &(cmd->recursive));
 	cmd->command = split_args(line + offset, cmd_len);
 	if (!cmdlist)
 		cmd->next = NULL;
@@ -99,6 +100,8 @@ int	checkredir(const char *line, int len)
 			return (REDIRHRE);
 		else if (!ft_strncmp(line, "&&", len))
 			return (REAND);
+		else if (!ft_strncmp(line, "||", len))
+			return (REOR);
 		// TODO: Change to properly print out error
 		else
 			printf("minishell: syntax error near unexpected token `%c\'\n", line[1]);

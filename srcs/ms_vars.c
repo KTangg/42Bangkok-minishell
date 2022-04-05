@@ -6,13 +6,15 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 11:35:42 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/02 12:10:12 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/04 18:19:40 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int	getarrsize(char **arr);
+
+extern t_ms_vars	*g_msvars;
 
 t_ms_vars	*init_global(char **envp)
 {
@@ -84,4 +86,25 @@ static int	getarrsize(char **arr)
 	while (arr[size])
 		size++;
 	return (size);
+}
+
+char	*getvar(char *index)
+{
+	t_vars	*temp;
+
+	temp = *(g_msvars->env_lst);
+	while (temp)
+	{
+		if (!ft_strcmp(temp->index, index))
+			return (temp->value);
+		temp = temp->next;
+	}
+	temp = *(g_msvars->var_lst);
+	while (temp)
+	{
+		if (!ft_strcmp(temp->index, index))
+			return (temp->value);
+		temp = temp->next;
+	}
+	return (NULL);
 }
