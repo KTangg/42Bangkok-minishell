@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:37 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/05 08:09:25 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/06 10:09:52 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,18 @@ static t_command	*split_redir(t_command *cmdlist, const char *line)
 	if (!cmd)
 		return (NULL);
 	cmd->redirection = getredir(line, &offset);
-	cmd->fileout = NULL;
-	cmd->outmode = 0;
 	cmd->recursive = 0;
+	if (cmd->redirection == -1)
+		return (NULL);
 	i += offset;
 	cmd_len += getcmdlen(line, &i, &(cmd->recursive));
 	cmd->command = split_args(line + offset, cmd_len);
-	if (!cmdlist)
-		cmd->next = NULL;
-	else
-		cmd->next = cmdlist;
+	cmd->next = cmdlist;
+	if (cmd->redirection == REPIPE && cmd->next == NULL)
+	{
+		print_synterr("|");
+		return (NULL);
+	}
 	return (split_redir(cmd, line + i));
 }
 
@@ -76,8 +78,11 @@ static int	getredir(const char *line, int *offset)
 			(*offset)++;
 		return (checkredir(line, i));
 	}
-	// else
-		// TODO: print out redirection syntax error
+	else
+	{
+		print_synterr(line);
+		return (-1);
+	}
 	return (0);
 }
 
@@ -102,9 +107,8 @@ int	checkredir(const char *line, int len)
 			return (REAND);
 		else if (!ft_strncmp(line, "||", len))
 			return (REOR);
-		// TODO: Change to properly print out error
-		else
-			printf("minishell: syntax error near unexpected token `%c\'\n", line[1]);
+		print_synterr(line);
+		return (-1);
 	}
 	return (0);
 }

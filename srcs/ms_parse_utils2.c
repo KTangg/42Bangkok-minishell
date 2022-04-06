@@ -6,11 +6,13 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 09:40:40 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/05 08:02:06 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/06 10:16:47 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern t_ms_vars	*g_msvars;
 
 static void	lst_relist(char **oldlst, char **newlst, int pos, int size);
 
@@ -25,6 +27,7 @@ int	getcmdlen(const char *line, int *pos, int *recursive)
 	dq_open = 0;
 	cmd_len = 0;
 	p_open = 0;
+	*recursive = 0;
 	while (line[*pos] && ((!isredir(line[*pos]) && !p_open) || sq_open || dq_open || p_open))
 	{
 		isquoting(line[*pos], &sq_open, &dq_open, &p_open);

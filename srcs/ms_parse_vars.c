@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:15:11 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/04 15:40:16 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/06 08:32:27 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,16 @@ char	*expand_var(char *line)
 	int		dq_open;
 	int		i;
 	int		varlen;
+	int		p_open;
 
 	sq_open = 0;
 	dq_open = 0;
+	p_open = 0;
 	i = 0;
 	varlen = 0;
 	while (line[i])
 	{
-		isquoting(line[i], &sq_open, &dq_open);
+		isquoting(line[i], &sq_open, &dq_open, &p_open);
 		if (line[i] == '$' && !sq_open && validvarn(line[i + 1], 0))
 		{
 			i++;

@@ -6,13 +6,14 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 08:46:16 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/06 05:57:08 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/06 08:48:25 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void			valvarset(t_command *cmd, int ncmd);
+
 t_command	*checkcmdlst(t_command *cmdlist)
 {
 	t_command	*cur;
@@ -41,7 +42,7 @@ static void	valvarset(t_command *cmd, int firstcmd)
 	if (isvarset(cmd->command[0]))
 	{
 		if (firstcmd == 1)
-			setvar(cmd->command[0]);
+			parsevarset(cmd->command[0], NULL);
 		cmd->command = lst_delcmd(cmd, cmd->command[0]);
 	}
 }

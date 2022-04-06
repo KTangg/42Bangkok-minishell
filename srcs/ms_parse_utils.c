@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 00:03:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/05 09:10:29 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/06 17:45:11 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static char	*getargv(const char *line, int len, int *offset)
 	p_open = 0;
 	while (line[*offset] && *offset < len)
 	{
-		if (isquoting(line[*offset], &sq_open, &dq_open, &p_open) && !p_open)
+		if (isquoting(line[*offset], &sq_open, &dq_open, &p_open) && !p_open && !sq_open && !dq_open)
 			arg_off--;
 		else if (line[*offset] == ' ' && !sq_open && !dq_open && !p_open)
 		{
@@ -119,11 +119,12 @@ static char	*skipquote(const char *str, int len)
 		return (NULL);
 	while (i < len)
 	{
-		if (isquoting(output[i], &sq_open, &dq_open, &p_open) < 3 && p_open)
-			;
-		else if (!(!p_open && output[i] == ')') || !(p_open == 1 && output[i] == '('))
-			if (!(output[i] == ' ' && !sq_open && !dq_open && !p_open))
-				output[i++] = *str;
+		if (isquoting(*str, &sq_open, &dq_open, &p_open))
+			str++;
+		if (sq_open || dq_open || p_open)
+			output[i++] = *str;
+		else if (*str != ' ' && !sq_open && !dq_open && !p_open)
+			output[i++] = *str;
 		str++;
 	}
 	output[i] = '\0';

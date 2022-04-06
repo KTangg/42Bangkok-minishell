@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 18:55:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 10:58:37 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/06 09:12:41 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,31 +32,68 @@ int	isvarset(char *cmd)
 	return (0);
 }
 
-void	setvar(char *cmd)
+void	parsevarset(char *cmd, t_vars **lst)
 {
 	int		i;
-	t_vars	*temp;
 	char	**nvar;
 
-	temp = *(g_msvars->env_lst);
 	nvar = ft_split(cmd, '=');
-	while (temp && ft_strcmp(temp->index, nvar[0]))
-		temp = temp->next;
-	if (temp == NULL)
-	{
-		temp = *(g_msvars->var_lst);
-		while (temp && ft_strcmp(temp->index, nvar[0]))
-			temp = temp->next;
-	}
-	if (temp == NULL)
-		app_var(g_msvars->var_lst, cmd);
-	else
-	{
-		free(temp->value);
-		temp->value = ft_strdup(nvar[1]);
-	}
+	setvar(nvar[0], nvar[1], lst);
 	i = 0;
 	while (nvar[i])
 		free(nvar[i++]);
 	free(nvar);
+}
+
+void	setvar(char *index, char *value, t_vars **lst)
+{
+	t_vars	*temp;
+
+	if (lst && *lst == NULL)
+		app_var(lst, index, value);
+	temp = *(g_msvars->env_lst);
+	if (!lst || temp == *lst)
+		while (temp && ft_strcmp(temp->index, index))
+			temp = temp->next;
+	if ((!lst && temp == NULL) || lst == g_msvars->var_lst)
+	{
+		temp = *(g_msvars->var_lst);
+		while (temp && ft_strcmp(temp->index, index))
+			temp = temp->next;
+	}
+	if (temp == NULL && !lst)
+		app_var(g_msvars->var_lst, index, value);
+	else if (temp == NULL && lst)
+		app_var(lst, index, value);
+	else
+	{
+		free(temp->value);
+		temp->value = ft_strdup(value);
+	}
+}
+
+void	unsetvar(char *index)
+{
+	t_vars	*temp;
+	t_vars	*clean;
+
+	temp = *(g_msvars->env_lst);
+	while (temp && temp->next && ft_strcmp(temp->next->index, index))
+		temp = temp->next;
+	if (temp->next == NULL)
+	{
+		temp = *(g_msvars->var_lst);
+		while (temp && temp->next && ft_strcmp(temp->next->index, index))
+			temp = temp->next;
+	}
+	if (temp->next == NULL)
+		return ;
+	else
+	{
+		clean = temp->next;
+		temp->next = temp->next->next;
+		free(clean->index);
+		free(clean->value);
+		free(clean);
+	}
 }

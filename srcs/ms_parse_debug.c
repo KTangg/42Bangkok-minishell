@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:07:35 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/05 09:19:20 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/06 10:08:07 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	print_cmdlst(t_command *cmdlist)
 		}
 		free(temp->command);
 		printf(" - Redirection: %i ", temp->redirection);
-		printf("File out: %s Mode: %i ", temp->fileout, temp->outmode);
 		printf("Recursion: %i\n", temp->recursive);
 		clean = temp;
 		temp = temp->next;

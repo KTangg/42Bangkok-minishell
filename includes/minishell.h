@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/05 07:06:52 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/06 10:06:23 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@
 typedef struct s_command {
 	int					redirection;
 	char				**command;
-	char				*fileout;
-	int					outmode;
 	int					recursive;
 	struct s_command	*next;
 }	t_command;
@@ -77,18 +75,23 @@ t_command	*parse_seqcmds(char *line);
 int			isredir(const char c);
 int			getcmdlen(const char *line, int *pos, int *recursive);
 t_ms_vars	*init_global(char **envp);
-void		app_var(t_vars **lst, char *line);
+void		app_var(t_vars **lst, char *index, char *value);
 void		print_varlist(t_vars **lst);
 int			isquoting(char c, int *sq_open, int *dq_open, int *p_open);
 char		*expand_var(char *line);
 int			validvarn(char c, int pos);
 t_command	*checkcmdlst(t_command *cmdlist);
-void		setvar(char *cmd);
+void		setvar(char *index, char *value, t_vars **lst);
 int			isvarset(char *cmd);
 char		**lst_delcmd(t_command *cmdlist, char *cmd);
 t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur);
 char		*getvar(char *index);
 void		print_cmdlst(t_command *cmdlist);
+void		print_synterr(const char *str);
+char		*getshell(void);
+void		setshell(char *name);
+void		parsevarset(char *cmd, t_vars **lst);
+void		unsetvar(char *index);
 
 // Redirection Prototype
 void		redir_out(t_command *command_line);

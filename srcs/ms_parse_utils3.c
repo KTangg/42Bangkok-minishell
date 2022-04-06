@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 11:15:44 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 12:18:12 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/06 10:07:43 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,7 @@ t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur)
 	if (prev != cur)
 		while (prev->next != cur)
 			prev = prev->next;
-	target->fileout = ft_strdup(cur->command[0]);
 	lst_cmdapp(target, &(cur->command[1]));
-	if (cur->redirection == 2 && target)
-		target->outmode = 1;
-	else if (cur->redirection == 3 && target)
-		target->outmode = 2;
 	free(cur->command[0]);
 	if (prev != cur)
 		prev->next = target;
