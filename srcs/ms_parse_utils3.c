@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 11:15:44 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/06 10:07:43 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 08:31:11 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,12 @@ static void	lst_cmdapp(t_command *cmd, char **toapp)
 	newargv[arr_size] = toapp[i];
 	free(cmd->command);
 	cmd->command = newargv;
+}
+
+void	init_parexcp(t_parexcp *p)
+{
+	p->any_open = 0;
+	p->sq_open = 0;
+	p->dq_open = 0;
+	p->p_open = 0;
 }

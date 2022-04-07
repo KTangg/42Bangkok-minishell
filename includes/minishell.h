@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/06 10:06:23 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 07:59:06 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,13 @@ typedef struct s_cmdset {
 	int				logic;
 }	t_cmdset;
 
+typedef struct s_parexcp {
+	int	sq_open;
+	int	dq_open;
+	int	p_open;
+	int	any_open;
+}	t_parexcp;
+
 char		*getprompt(void);
 
 // Line Process Prototype
@@ -77,7 +84,7 @@ int			getcmdlen(const char *line, int *pos, int *recursive);
 t_ms_vars	*init_global(char **envp);
 void		app_var(t_vars **lst, char *index, char *value);
 void		print_varlist(t_vars **lst);
-int			isquoting(char c, int *sq_open, int *dq_open, int *p_open);
+int			isquoting(char c, t_parexcp *p);
 char		*expand_var(char *line);
 int			validvarn(char c, int pos);
 t_command	*checkcmdlst(t_command *cmdlist);
@@ -92,6 +99,7 @@ char		*getshell(void);
 void		setshell(char *name);
 void		parsevarset(char *cmd, t_vars **lst);
 void		unsetvar(char *index);
+void		init_parexcp(t_parexcp *p);
 
 // Redirection Prototype
 void		redir_out(t_command *command_line);

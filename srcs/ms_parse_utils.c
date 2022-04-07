@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 00:03:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/06 17:45:11 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 08:27:43 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,21 @@ char	**split_args(const char *line, int len)
 
 static int	getargc(const char *line, int len)
 {
-	int	i;
-	int	argc;
-	int	sq_open;
-	int	dq_open;
-	int	p_open;
+	int			i;
+	int			argc;
+	t_parexcp	parexcp;
 
 	i = 0;
 	argc = 0;
-	sq_open = 0;
-	dq_open = 0;
-	p_open = 0;
+	parexcp.sq_open = 0;
+	parexcp.dq_open = 0;
+	parexcp.p_open = 0;
+	parexcp.any_open = 0;
 	while (line[i] && i < len)
 	{
-		if (isquoting(line[i], &sq_open, &dq_open, &p_open))
+		if (isquoting(line[i], &parexcp))
 			;
-		else if (line[i] == ' ' && !sq_open && !dq_open && !p_open)
+		else if (line[i] == ' ' && !parexcp.any_open)
 		{
 			while (line[i + 1] == ' ')
 				i++;
@@ -73,30 +72,25 @@ static int	getargc(const char *line, int len)
 
 static char	*getargv(const char *line, int len, int *offset)
 {
-	int	sq_open;
-	int	dq_open;
-	int	arg_len;
-	int	arg_off;
-	int	p_open;
+	int			arg_len;
+	int			arg_off;
+	t_parexcp	parexcp;
 
 	arg_len = 0;
-	sq_open = 0;
-	dq_open = 0;
-	arg_off = 0;
-	p_open = 0;
+	init_parexcp(&parexcp);
+	arg_off = -(!!(*offset));
 	while (line[*offset] && *offset < len)
 	{
-		if (isquoting(line[*offset], &sq_open, &dq_open, &p_open) && !p_open && !sq_open && !dq_open)
+		if (isquoting(line[*offset], &parexcp))
 			arg_off--;
-		else if (line[*offset] == ' ' && !sq_open && !dq_open && !p_open)
+		else if (line[*offset] == ' ' && !parexcp.any_open)
 		{
 			while (line[*offset] == ' ')
 				arg_off -= !!((*offset)++);
 			break ;
 		}
-		else if (!(p_open == 0 && line[*offset] == ')'))
-			if (!(p_open == 1 && line[*offset] == '('))
-				arg_len++;
+		else if (!(!parexcp.any_open && isredir(line[*offset])))
+			arg_len++;
 		(*offset)++;
 	}
 	return (skipquote(line + arg_off + *offset - arg_len, arg_len));
@@ -104,26 +98,22 @@ static char	*getargv(const char *line, int len, int *offset)
 
 static char	*skipquote(const char *str, int len)
 {
-	char	*output;
-	int		i;
-	int		sq_open;
-	int		dq_open;
-	int		p_open;
+	char		*output;
+	int			i;
+	t_parexcp	parexcp;
 
 	i = 0;
-	sq_open = 0;
-	dq_open = 0;
-	p_open = 0;
+	init_parexcp(&parexcp);
 	output = (char *)malloc((len + 1) * sizeof(char));
 	if (!output)
 		return (NULL);
-	while (i < len)
+	while (i < len && *str)
 	{
-		if (isquoting(*str, &sq_open, &dq_open, &p_open))
+		if (isquoting(*str, &parexcp))
 			str++;
-		if (sq_open || dq_open || p_open)
+		if (parexcp.any_open)
 			output[i++] = *str;
-		else if (*str != ' ' && !sq_open && !dq_open && !p_open)
+		else if (*str != ' ' && !parexcp.any_open)
 			output[i++] = *str;
 		str++;
 	}

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:15:11 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/06 08:32:27 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 07:47:42 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,22 @@ static int	getvarlen(char *line, int dq_open);
 
 char	*expand_var(char *line)
 {
-	int		sq_open;
-	int		dq_open;
-	int		i;
-	int		varlen;
-	int		p_open;
+	t_parexcp	p;
+	int			i;
+	int			varlen;
 
-	sq_open = 0;
-	dq_open = 0;
-	p_open = 0;
+	p.sq_open = 0;
+	p.dq_open = 0;
+	p.p_open = 0;
 	i = 0;
 	varlen = 0;
 	while (line[i])
 	{
-		isquoting(line[i], &sq_open, &dq_open, &p_open);
-		if (line[i] == '$' && !sq_open && validvarn(line[i + 1], 0))
+		isquoting(line[i], &p);
+		if (line[i] == '$' && !p.sq_open && validvarn(line[i + 1], 0))
 		{
 			i++;
-			varlen = getvarlen(line + i, dq_open);
+			varlen = getvarlen(line + i, p.dq_open);
 			break ;
 		}
 		i++;

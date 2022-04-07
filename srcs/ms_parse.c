@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:37 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/06 10:09:52 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 08:30:02 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,9 @@ static t_command	*split_redir(t_command *cmdlist, const char *line)
 	cmd->command = split_args(line + offset, cmd_len);
 	cmd->next = cmdlist;
 	if (cmd->redirection == REPIPE && cmd->next == NULL)
-	{
 		print_synterr("|");
+	if (cmd->redirection == REPIPE && cmd->next == NULL)
 		return (NULL);
-	}
 	return (split_redir(cmd, line + i));
 }
 
