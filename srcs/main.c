@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/06 09:02:45 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 08:41:17 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static void	sig_handle(int signo, siginfo_t *info, void *other)
 void	shell_exit(void)
 {
 	rl_clear_history();
+	ms_cleanup_global();
 	printf("\n");
 	exit(0);
 }

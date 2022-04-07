@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 11:35:42 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/06 17:45:20 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 09:04:58 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ t_ms_vars	*init_global(char **envp)
 	while (envp[i])
 	{
 		var_len = ft_strlen(envp[i]);
-		(ms_global->environ)[i] = (char *)malloc((var_len + 1) * sizeof(char));
 		(ms_global->environ)[i] = ft_strdup(envp[i]);
 		(ms_global->environ)[i][var_len] = '\0';
 		parsevarset(ms_global->environ[i++], ms_global->env_lst);

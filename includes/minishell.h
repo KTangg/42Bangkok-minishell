@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 07:59:06 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 08:40:50 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void		setshell(char *name);
 void		parsevarset(char *cmd, t_vars **lst);
 void		unsetvar(char *index);
 void		init_parexcp(t_parexcp *p);
+void		ms_cleanup_global(void);
 
 // Redirection Prototype
 void		redir_out(t_command *command_line);
