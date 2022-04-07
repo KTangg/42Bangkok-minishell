@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 15:48:15 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/07 08:40:50 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,11 @@
 # define REOR 7
 # define HERE_DOCFILE "here_doc.txt"
 
-// Outmode. 0 - Do nothing; 1 - > to file; 2 - >> to file;
+// Outmode: 0 - Do nothing; 1 - > to file; 2 - >> to file;
 typedef struct s_command {
 	int					redirection;
 	char				**command;
-	char				*fileout;
-	int					outmode;
+	int					recursive;
 	struct s_command	*next;
 }	t_command;
 
@@ -53,7 +52,21 @@ typedef struct s_ms_vars {
 	t_vars	**var_lst;
 }	t_ms_vars;
 
-// Get Prompt for Readline Prototype
+// Logic: 0 - Execute; 1 - AND; 2 - OR;
+typedef struct s_cmdset {
+	struct s_cmdset	*cmdset1;
+	struct s_cmdset	*cmdset2;
+	t_command		*command;
+	int				logic;
+}	t_cmdset;
+
+typedef struct s_parexcp {
+	int	sq_open;
+	int	dq_open;
+	int	p_open;
+	int	any_open;
+}	t_parexcp;
+
 char		*getprompt(void);
 
 // Line Process Prototype
@@ -67,18 +80,27 @@ char		**split_args(const char *line, int len);
 int			checkredir(const char *line, int len);
 t_command	*parse_seqcmds(char *line);
 int			isredir(const char c);
-int			getcmdlen(const char *line, int *pos);
+int			getcmdlen(const char *line, int *pos, int *recursive);
 t_ms_vars	*init_global(char **envp);
-void		app_var(t_vars **lst, char *line);
+void		app_var(t_vars **lst, char *index, char *value);
 void		print_varlist(t_vars **lst);
-int			isquoting(char c, int *sq_open, int *dq_open);
+int			isquoting(char c, t_parexcp *p);
 char		*expand_var(char *line);
 int			validvarn(char c, int pos);
 t_command	*checkcmdlst(t_command *cmdlist);
-void		setvar(char *cmd);
+void		setvar(char *index, char *value, t_vars **lst);
 int			isvarset(char *cmd);
 char		**lst_delcmd(t_command *cmdlist, char *cmd);
 t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur);
+char		*getvar(char *index);
+void		print_cmdlst(t_command *cmdlist);
+void		print_synterr(const char *str);
+char		*getshell(void);
+void		setshell(char *name);
+void		parsevarset(char *cmd, t_vars **lst);
+void		unsetvar(char *index);
+void		init_parexcp(t_parexcp *p);
+void		ms_cleanup_global(void);
 
 // Redirection Prototype
 void		redir_out(t_command *command_line);

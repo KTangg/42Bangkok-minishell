@@ -2,3 +2,4 @@ test.c
 minishell
 objs
 test*
+*.json

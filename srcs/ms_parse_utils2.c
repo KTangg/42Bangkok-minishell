@@ -6,48 +6,66 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 09:40:40 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 10:58:53 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 08:14:04 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+extern t_ms_vars	*g_msvars;
+
 static void	lst_relist(char **oldlst, char **newlst, int pos, int size);
 
-int	getcmdlen(const char *line, int *pos)
+int	getcmdlen(const char *line, int *pos, int *recursive)
 {
-	int	sq_open;
-	int	dq_open;
-	int	cmd_len;
+	int			cmd_len;
+	t_parexcp	parexcp;
 
-	sq_open = 0;
-	dq_open = 0;
+	parexcp.sq_open = 0;
+	parexcp.dq_open = 0;
 	cmd_len = 0;
-	while (line[*pos] && (!isredir(line[*pos]) || sq_open == 1 || dq_open == 1))
+	parexcp.p_open = 0;
+	parexcp.any_open = 0;
+	*recursive = 0;
+	while (line[*pos] && ((!isredir(line[*pos]) && !parexcp.p_open) \
+	|| parexcp.any_open))
 	{
-		if (line[*pos] == '\'' && dq_open != 1)
-			sq_open = !sq_open;
-		else if (line[*pos] == '\"' && sq_open != 1)
-			dq_open = !dq_open;
-		(*pos)++;
+		isquoting(line[*pos], &parexcp);
 		cmd_len++;
+		(*pos)++;
+		if (parexcp.p_open)
+			*recursive = 1;
 	}
+	if (!(line[*pos]) && parexcp.p_open)
+		return (-1);
 	return (cmd_len);
 }
 
 // Return >0 if opening/closing quotes; 1 = single quotes; 2 = double quotes;
-int	isquoting(char c, int *sq_open, int *dq_open)
+int	isquoting(char c, t_parexcp *p)
 {
-	if (c == '\'' && !(*dq_open))
+	if ((c == '(' || c == ')') && !(p->sq_open) && !(p->dq_open))
 	{
-		*sq_open = !(*sq_open);
+		if (c == '(')
+			(p->p_open)++;
+		else if (c == ')')
+			(p->p_open)--;
+		p->any_open = (p->sq_open + p->dq_open + p->p_open > 0);
+		return (3);
+	}
+	else if (c == '\'' && !(p->dq_open) && !(p->p_open))
+	{
+		p->sq_open = !(p->sq_open);
+		p->any_open = (p->sq_open + p->dq_open + p->p_open > 0);
 		return (1);
 	}
-	else if (c == '\"' && !(*sq_open))
+	else if (c == '\"' && !(p->sq_open) && !(p->p_open))
 	{
-		*dq_open = !(*dq_open);
+		p->dq_open = !(p->dq_open);
+		p->any_open = (p->sq_open + p->dq_open + p->p_open > 0);
 		return (2);
 	}
+	p->any_open = (p->sq_open + p->dq_open + p->p_open > 0);
 	return (0);
 }
 

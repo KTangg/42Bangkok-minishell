@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_line.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:12:32 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/03 15:14:22 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/04 18:20:33 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ int	shell_line(char *line)
 	cmdlist = parse_seqcmds(line);
 	if (!cmdlist)
 		return (-1);
-	execute_line(cmdlist);
+	if (getvar("DEBUG_MODE") && !ft_strcmp(getvar("DEBUG_MODE"), "1"))
+		print_cmdlst(cmdlist);
+	else
+		execute_line(cmdlist);
 	return (0);
 }
