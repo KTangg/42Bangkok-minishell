@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 08:40:50 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 14:06:36 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,12 @@ void		parsevarset(char *cmd, t_vars **lst);
 void		unsetvar(char *index);
 void		init_parexcp(t_parexcp *p);
 void		ms_cleanup_global(void);
+
+// Exec Helper
+int			is_pipe(t_command *cmd);
+int			is_logical(t_command *cmd);
+int			is_redirection(t_command *cmd);
+void		redir_exec(t_command *command_line);
 
 // Redirection Prototype
 void		redir_out(t_command *command_line);

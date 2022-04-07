@@ -1,17 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ms_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 08:41:17 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/07 14:04:07 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+extern int	g_pid;
+extern int	g_wstatus;
+int			dup_fd[2];
 t_ms_vars	*g_msvars;
 
 // Signal handling function
@@ -21,11 +24,17 @@ static void	sig_handle(int signo, siginfo_t *info, void *other)
 	(void)other;
 	if (signo == SIGINT)
 	{
-		rl_on_new_line();
+		if (g_pid == 0)
+			exit(1);
+		if (g_wstatus == 0)
+		{
+			rl_on_new_line();
+			printf("\n");
+			rl_replace_line("", 0);
+			rl_redisplay();
+			return ;
+		}
 		printf("\n");
-		rl_replace_line("", 0);
-		rl_redisplay();
-		return ;
 	}
 	if (signo == SIGQUIT)
 		return ;
@@ -44,9 +53,11 @@ void	shell_exit(void)
 // Not echo ctrl command
 static void	init_term(struct termios term)
 {
-	tcgetattr(fileno(stdin), &term);
+	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(fileno(stdin), 0, &term);
+	tcsetattr(STDIN_FILENO, 0, &term);
+	dup_fd[0] = dup(STDIN_FILENO);
+	dup_fd[1] = dup(STDOUT_FILENO);
 }
 
 // Initial signal handler
@@ -75,6 +86,7 @@ int	main(int argc, char **argv, char **envp)
 	init_signal();
 	while (1)
 	{
+		g_wstatus = 0;
 		prompt = getprompt();
 		line = readline(prompt);
 		if (!line)

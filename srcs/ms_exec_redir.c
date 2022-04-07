@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 21:21:04 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 10:56:30 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/07 14:05:25 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,31 @@
 #include <sys/wait.h>
 #include "minishell.h"
 
-void	hr_doc_input(char *end, int fd)
+extern int dup_fd[2];
+
+static void	hr_doc_input(char *end, int fd)
 {
-	char	*line;
+	int		ret;
+	char	line[1024];
 	size_t	n;
 
 	while (1)
 	{
-		line = readline("> ");
-		if (line == NULL)
+		ft_putstr_fd("> ", dup_fd[1]);
+		ret = read(dup_fd[0], line, 1024);
+		if (ret == 0)
 		{
 			ft_putendl_fd("warning: here-document delimited by end-of-file",
 				STDERR_FILENO);
 			break ;
 		}
+		if (ret > 0)
+			line[ret - 1] = '\0';
 		if (ft_strcmp(line, end) == 0)
-		{
-			free(line);
 			break ;
-		}
 		n = ft_strlen(line);
 		write(fd, line, n);
 		write(fd, "\n", 1);
-		free(line);
 	}
 }
 
