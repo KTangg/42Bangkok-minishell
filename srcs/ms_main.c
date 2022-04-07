@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 14:04:07 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:42:14 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ void	shell_exit(void)
 {
 	rl_clear_history();
 	ms_cleanup_global();
-	printf("\n");
+	ft_putendl_fd("exit", dup_fd[1]);
+	close(dup_fd[0]);
+	close(dup_fd[1]);
 	exit(0);
 }
 

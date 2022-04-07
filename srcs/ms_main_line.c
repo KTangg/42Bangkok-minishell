@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:12:32 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 14:04:30 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:41:59 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 
 pid_t	g_pid = 1;
 int		g_wstatus = 0;
+
+t_command	*reverse_command(t_command *command_line);
 
 static void	free_cmd_list(t_command	*cmd_list)
 {
@@ -42,13 +44,14 @@ static void	free_cmd_list(t_command	*cmd_list)
 void	execute_line(t_command *cmd_list)
 {
 	g_wstatus = -1;
+	cmd_list = reverse_command(cmd_list);
 	g_pid = fork();
 	if (g_pid == 0)
 	{
 		section_execute(cmd_list);
 		exit(3);
 	}
-	waitpid(g_pid, &g_wstatus, 0);
+	wait(&g_wstatus);
 	free_cmd_list(cmd_list);
 }
 

@@ -6,18 +6,22 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:17:40 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 14:05:39 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:42:05 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <sys/wait.h>
 
+extern int	dup_fd[2];
+
 static int	check_input(t_command *command_line)
 {
 	t_command	*cursor;
 
-	cursor = command_line;
+	if (command_line == NULL)
+		return (0);
+	cursor = command_line->next;
 	while (cursor != NULL && is_redirection(cursor))
 	{
 		if (cursor->redirection == REDIRIN || cursor->redirection == REDIRHRE)
@@ -31,7 +35,9 @@ static int	check_output(t_command *command_line)
 {
 	t_command	*cursor;
 
-	cursor = command_line;
+	if (command_line == NULL)
+		return (0);
+	cursor = command_line->next;
 	while (cursor != NULL && is_redirection(cursor))
 	{
 		if (cursor->redirection == REDIROUT || cursor->redirection == REDIRAPP)
@@ -41,44 +47,47 @@ static int	check_output(t_command *command_line)
 	return (0);
 }
 
-static void	right_section_execute(t_command *command_line, int *pipefd)
-{
-	if (!check_input(command_line))
-		dup2(pipefd[0], STDIN_FILENO);
-	close(pipefd[0]);
-	close(pipefd[1]);
-	if (command_line->recursive)
-	{
-		shell_line(command_line->command[0]);
-	}
-	else
-	{
-		if (is_redirection(command_line))
-			redir_exec(command_line);
-		else
-			execute(command_line->command);
-	}
-}
-
-static void	left_section_execute(t_command *command_line, int *pipefd)
+static void	right_pipe_execute(t_command *command_line, int *pipefd, pid_t pid)
 {
 	t_command	*cursor;
 
 	cursor = command_line;
-	while (cursor != NULL && !is_pipe(cursor))
-		cursor = cursor->next;
 	if (cursor == NULL)
 		return ;
 	cursor = cursor->next;
-	if (!check_output(cursor))
+	while (cursor != NULL && is_redirection(cursor))
+		cursor = cursor->next;
+	if (!check_input(cursor))
+		dup2(pipefd[0], STDIN_FILENO);
+	close(pipefd[0]);
+	close(pipefd[1]);
+	waitpid(pid, NULL, 0);
+	if (cursor == NULL)
+	{
+		if (command_line->recursive)
+			shell_line(command_line->command[0]);
+		else
+			redir_exec(command_line->next, command_line->command);
+	}
+	else
+	{
+		section_execute(cursor);
+	}
+}
+
+static void	left_pipe_execute(t_command *command_line, int *pipefd)
+{
+	if (!check_output(command_line))
 		dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	if (cursor != NULL)
-		section_execute(cursor);
+	if (command_line->recursive)
+		shell_line(command_line->command[0]);
+	else
+		redir_exec(command_line->next, command_line->command);
 }
 
-void	redir_pipe(t_command *command_line)
+void	redir_pipe(t_command *left_cmd, t_command *right_cmd)
 {
 	pid_t	pid;
 	int		pipefd[2];
@@ -95,7 +104,7 @@ void	redir_pipe(t_command *command_line)
 		return ;
 	}
 	if (pid == 0)
-		left_section_execute(command_line, pipefd);
+		left_pipe_execute(left_cmd, pipefd);
 	else
-		right_section_execute(command_line, pipefd);
+		right_pipe_execute(right_cmd, pipefd, pid);
 }

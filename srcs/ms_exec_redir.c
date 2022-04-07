@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 21:21:04 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 14:05:25 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:42:04 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	hr_doc_input(char *end, int fd)
 	}
 }
 
-void	here_document(t_command *command_line)
+void	here_document(t_command *command_line, char **commamd)
 {
 	int	fd;
 
@@ -62,10 +62,10 @@ void	here_document(t_command *command_line)
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	redir_exec(command_line->next);
+	redir_exec(command_line->next, commamd);
 }
 
-void	redir_inp(t_command *command_line)
+void	redir_inp(t_command *command_line, char **commamd)
 {
 	int		fd;
 	char	*path;
@@ -79,10 +79,10 @@ void	redir_inp(t_command *command_line)
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	redir_exec(command_line->next);
+	redir_exec(command_line->next, commamd);
 }
 
-void	redir_out(t_command *command_line)
+void	redir_out(t_command *command_line, char **commamd)
 {
 	int		fd;
 	char	*path;
@@ -96,10 +96,10 @@ void	redir_out(t_command *command_line)
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-	redir_exec(command_line->next);
+	redir_exec(command_line->next, commamd);
 }
 
-void	redir_app(t_command *command_line)
+void	redir_app(t_command *command_line, char **commamd)
 {
 	int		fd;
 	char	*path;
@@ -113,5 +113,5 @@ void	redir_app(t_command *command_line)
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-	redir_exec(command_line->next);
+	redir_exec(command_line->next, commamd);
 }

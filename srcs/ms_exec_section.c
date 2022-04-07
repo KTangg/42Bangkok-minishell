@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:37:14 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 14:05:42 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:42:03 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,16 @@ void	section_execute(t_command *cmd_section)
 {
 	t_command	*next_cmd;
 
-	next_cmd = cmd_section;
 	if (cmd_section == NULL)
 		return ;
+	next_cmd = cmd_section->next;
 	while (next_cmd != NULL && is_redirection(next_cmd))
 		next_cmd = next_cmd->next;
 	if (next_cmd == NULL)
-		redir_exec(cmd_section);
+		redir_exec(cmd_section->next, cmd_section->command);
 	else
 	{
 		if (is_pipe(next_cmd))
-			redir_pipe(cmd_section);
-		if (next_cmd->redirection == 0)
-			redir_exec(cmd_section);
+			redir_pipe(cmd_section, next_cmd);
 	}
 }

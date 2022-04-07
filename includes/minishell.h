@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 14:06:36 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:03:13 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,16 +106,16 @@ void		ms_cleanup_global(void);
 int			is_pipe(t_command *cmd);
 int			is_logical(t_command *cmd);
 int			is_redirection(t_command *cmd);
-void		redir_exec(t_command *command_line);
+void		redir_exec(t_command *command_line, char **command);
 
 // Redirection Prototype
-void		redir_out(t_command *command_line);
-void		redir_app(t_command *command_line);
-void		redir_inp(t_command *command_line);
-void		here_document(t_command *command_line);
+void		redir_out(t_command *command_line, char **commamd);
+void		redir_app(t_command *command_line, char **commamd);
+void		redir_inp(t_command *command_line, char **commamd);
+void		here_document(t_command *command_line, char **commamd);
 
 // Pipe Prototype
-void		redir_pipe(t_command *command_line);
+void		redir_pipe(t_command *left_cmd, t_command *right_cmd);
 
 // Section Command Prototype
 void		section_execute(t_command *cmd_section);
