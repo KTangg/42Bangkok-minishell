@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 17:38:26 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 18:19:44 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 20:33:31 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	cmd_pwd(char **argv)
 	if (!str)
 		return (-1);
 	printf("%s\n", str);
+	free(str);
 	return (0);
 }
 
@@ -86,25 +87,25 @@ int	cmd_cd(char **argv)
 	str = NULL;
 	if (!argv[1])
 	{
-		chdir(getvar("HOME"));
-		setvar("PWD", getvar("HOME"), g_msvars->env_lst);
+		str = getvar("HOME");
+		chdir(str);
+		setvar("PWD", str, g_msvars->env_lst);
+		free(str);
 		return (0);
 	}
 	if (argv[2])
-	{
 		built_printerr(argv[0], argv[2]);
+	if (argv[2])
 		return (-1);
-	}
 	err = chdir(argv[1]);
 	if (err)
 		perror(strerror(err));
-	else
-	{
-		str = getcwd(str, 0);
-		setvar("PWD", str, g_msvars->env_lst);
-		return (0);
-	}
-	return (-1);
+	if (err)
+		return (-1);
+	str = getcwd(str, 0);
+	setvar("PWD", str, g_msvars->env_lst);
+	free(str);
+	return (0);
 }
 
 int	cmd_exit(char **argv)

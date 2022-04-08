@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_input.c                                         :+:      :+:    :+:   */
+/*   ms_main_input.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:39:27 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 15:45:44 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/08 22:19:37 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@ char	*getprompt(void)
 	char	cwd[1000];
 
 	getcwd(cwd, 1000);
-	ft_strlcpy(prompt, getenv("USER"), 1000);
+	ft_strlcpy(prompt, "\e[1;31m", 1000);
+	ft_strlcat(prompt, getenv("USER"), 1000);
 	ft_strlcat(prompt, "@", 1000);
 	ft_strlcat(prompt, getenv("NAME"), 1000);
+	ft_strlcat(prompt, "\e[0m", 1000);
 	ft_strlcat(prompt, ":", 1000);
+	ft_strlcat(prompt, "\e[1;35m", 1000);
 	if (!ft_strncmp(cwd, getenv("HOME"), ft_strlen(getenv("HOME"))))
 	{
 		ft_strlcat(prompt, "~", 1000);
@@ -30,6 +33,7 @@ char	*getprompt(void)
 	}
 	else
 		ft_strlcat(prompt, cwd, 1000);
+	ft_strlcat(prompt, "\e[0m", 1000);
 	ft_strlcat(prompt, "$ ", 1000);
 	return (ft_strdup(prompt));
 }

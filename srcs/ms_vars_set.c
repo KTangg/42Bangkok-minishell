@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 18:55:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 17:35:16 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 22:36:23 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,24 @@ int	isvarset(char *cmd)
 
 void	parsevarset(char *cmd, t_vars **lst)
 {
-	int		i;
-	char	**nvar;
+	int		len_index;
+	int		len_value;
+	char	*index;
+	char	*value;
 
-	nvar = ft_split(cmd, '=');
-	setvar(nvar[0], nvar[1], lst);
-	i = 0;
-	while (nvar[i])
-		free(nvar[i++]);
-	free(nvar);
+	len_index = 0;
+	while (cmd[len_index] != '=')
+		len_index++;
+	index = (char *)malloc((len_index + 1) * sizeof(char));
+	ft_strlcpy(index, cmd, len_index + 1);
+	index[len_index] = '\0';
+	len_value = ft_strlen(cmd + len_index + 1);
+	value = (char *)malloc((len_value + 1) * sizeof(char));
+	ft_strlcpy(value, cmd + len_index + 1, len_value + 1);
+	value[len_value] = '\0';
+	setvar(index, value, lst);
+	free(index);
+	free(value);
 }
 
 void	setvar(char *index, char *value, t_vars **lst)
