@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 18:55:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 08:50:48 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 17:35:16 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,15 @@ void	setvar(char *index, char *value, t_vars **lst)
 	if (!lst || temp == *lst)
 		while (temp && ft_strcmp(temp->index, index))
 			temp = temp->next;
+	if (temp)
+		set_environ(index, value);
 	if ((!lst && temp == NULL) || lst == g_msvars->var_lst)
 	{
 		temp = *(g_msvars->var_lst);
 		while (temp && ft_strcmp(temp->index, index))
 			temp = temp->next;
 	}
-	if (temp == NULL && !lst)
+	if (temp == NULL && (!lst || lst == g_msvars->var_lst))
 		app_var(g_msvars->var_lst, index, value);
 	else if (temp == NULL && lst)
 		app_var(lst, index, value);
@@ -72,28 +74,59 @@ void	setvar(char *index, char *value, t_vars **lst)
 	}
 }
 
-void	unsetvar(char *index)
+void	set_environ(char *index, char *value)
 {
 	t_vars	*temp;
-	t_vars	*clean;
+	char	*output;
+	int		len;
+	int		i;
 
+	i = 0;
 	temp = *(g_msvars->env_lst);
-	while (temp && temp->next && ft_strcmp(temp->next->index, index))
+	while (temp && ft_strcmp(temp->index, index) && i++ >= 0)
 		temp = temp->next;
-	if (temp->next == NULL)
+	if (temp)
 	{
-		temp = *(g_msvars->var_lst);
-		while (temp && temp->next && ft_strcmp(temp->next->index, index))
-			temp = temp->next;
+		free(g_msvars->environ[i]);
+		len = ft_strlen(index) + ft_strlen(value) + 2;
+		output = (char *)malloc((len) * sizeof(char));
+		output[0] = '\0';
+		ft_strlcat(output, index, len);
+		ft_strlcat(output, "=", len);
+		if (value)
+			ft_strlcat(output, value, len);
+		output[len - 1] = '\0';
+		g_msvars->environ[i] = output;
 	}
-	if (temp->next == NULL)
-		return ;
-	else
-	{
-		clean = temp->next;
-		temp->next = temp->next->next;
-		free(clean->index);
-		free(clean->value);
-		free(clean);
-	}
+	else if (index)
+		add_environ(index, value, i);
+}
+
+void	add_environ(char *index, char *value, int size)
+{
+	int		i;
+	char	**newenv;
+	char	*output;
+	int		len;
+
+	i = -1;
+	newenv = (char **)malloc((size + 2) * sizeof(char *));
+	free((g_msvars->environ)[size]);
+	while (++i < size)
+		newenv[i] = (g_msvars->environ)[i];
+	len = 0;
+	if (value)
+		len = ft_strlen(value);
+	len += ft_strlen(index) + 2;
+	output = (char *)malloc(len * sizeof(char));
+	output[0] = '\0';
+	ft_strlcat(output, index, len);
+	ft_strlcat(output, "=", len);
+	if (value)
+		ft_strlcat(output, value, len);
+	output[len - 1] = '\0';
+	newenv[i++] = output;
+	newenv[i] = NULL;
+	free(g_msvars->environ);
+	g_msvars->environ = newenv;
 }

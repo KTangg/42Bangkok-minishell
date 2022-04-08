@@ -6,13 +6,11 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 11:35:42 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 15:19:10 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 17:24:34 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	getarrsize(char **arr);
 
 extern t_ms_vars	*g_msvars;
 
@@ -49,6 +47,8 @@ void	app_var(t_vars **lst, char *index, char *value)
 	t_vars	*newvar;
 	t_vars	*temp;
 
+	if (lst == g_msvars->env_lst)
+		set_environ(index, value);
 	newvar = (t_vars *)malloc(sizeof(t_vars));
 	newvar->index = ft_strdup(index);
 	if (value)
@@ -79,7 +79,7 @@ void	print_varlist(t_vars **lst)
 	}
 }
 
-static int	getarrsize(char **arr)
+int	getarrsize(char **arr)
 {
 	int	size;
 

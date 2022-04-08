@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 14:40:29 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 18:09:09 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_parexcp {
 }	t_parexcp;
 
 char		*getprompt(void);
+void		shell_exit(void);
 
 // Line Process Prototype
 int			shell_line(char *line);
@@ -104,6 +105,17 @@ void		init_parexcp(t_parexcp *p);
 void		ms_cleanup_global(void);
 void		init_cmd(t_command *cmd);
 void		clean_cmdfiles(t_redirect *target);
+void		built_printerr(char *cmd, char *arg);
+void		set_environ(char *index, char *value);
+void		add_environ(char *index, char *value, int size);
+int			getarrsize(char **arr);
+
+// Builtin Commands Prototypes
+int			check_built(char **argv, char **envp);
+int			cmd_env(char **argv, char **envp);
+int			cmd_echo(char **argv, char **envp);
+int			cmd_exit(char **argv);
+int			cmd_cd(char **argv);
 
 // Exec Helper
 int			is_pipe(t_command *cmd);
