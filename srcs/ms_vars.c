@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 11:35:42 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 09:04:58 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 15:19:10 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	app_var(t_vars **lst, char *index, char *value)
 	newvar->index = ft_strdup(index);
 	if (value)
 		newvar->value = ft_strdup(value);
+	else
+		newvar->value = NULL;
 	newvar->next = NULL;
 	if (*lst == NULL)
 		*lst = newvar;

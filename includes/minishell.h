@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 16:03:13 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/08 14:40:29 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,18 @@
 # define REOR 7
 # define HERE_DOCFILE "here_doc.txt"
 
-// Outmode: 0 - Do nothing; 1 - > to file; 2 - >> to file;
+// Outmode: 0 - Do nothing; 1 - '>' to file; 2 - '>>' to file;
+// Inmode: 0 - Do nothing; 1 - '<' read from file; 2 - '<<' Here Document
+typedef struct s_redirect {
+	char				*file;
+	int					redirect;
+	struct s_redirect	*next;
+}	t_redirect;
+
 typedef struct s_command {
 	int					redirection;
+	t_redirect			*output;
+	t_redirect			*input;
 	char				**command;
 	int					recursive;
 	struct s_command	*next;
@@ -51,14 +60,6 @@ typedef struct s_ms_vars {
 	t_vars	**env_lst;
 	t_vars	**var_lst;
 }	t_ms_vars;
-
-// Logic: 0 - Execute; 1 - AND; 2 - OR;
-typedef struct s_cmdset {
-	struct s_cmdset	*cmdset1;
-	struct s_cmdset	*cmdset2;
-	t_command		*command;
-	int				logic;
-}	t_cmdset;
 
 typedef struct s_parexcp {
 	int	sq_open;
@@ -101,6 +102,8 @@ void		parsevarset(char *cmd, t_vars **lst);
 void		unsetvar(char *index);
 void		init_parexcp(t_parexcp *p);
 void		ms_cleanup_global(void);
+void		init_cmd(t_command *cmd);
+void		clean_cmdfiles(t_redirect *target);
 
 // Exec Helper
 int			is_pipe(t_command *cmd);

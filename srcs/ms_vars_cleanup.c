@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:10:11 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 09:03:26 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 15:15:13 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ void	ms_cleanup_global(void)
 {
 	ms_cleanup_charlst(g_msvars->environ);
 	ms_cleanup_varlst(g_msvars->env_lst);
-	ms_cleanup_varlst(g_msvars->var_lst);
+	if (*(g_msvars->var_lst))
+		ms_cleanup_varlst(g_msvars->var_lst);
+	else
+		free(g_msvars->var_lst);
 	free(g_msvars);
 }
 
@@ -50,4 +53,19 @@ static void	ms_cleanup_varlst(t_vars **varlst)
 		free(temp);
 	}
 	free(varlst);
+}
+
+void	clean_cmdfiles(t_redirect *target)
+{
+	t_redirect	*temp;
+
+	temp = target;
+	while (target)
+	{
+		target = target->next;
+		if (temp->file)
+			free(temp->file);
+		free(temp);
+		temp = target;
+	}
 }

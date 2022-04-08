@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:37 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 08:30:02 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 07:59:19 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ static t_command	*split_redir(t_command *cmdlist, const char *line)
 	cmd = (t_command *)malloc(sizeof(t_command));
 	if (!cmd)
 		return (NULL);
+	init_cmd(cmd);
 	cmd->redirection = getredir(line, &offset);
-	cmd->recursive = 0;
 	if (cmd->redirection == -1)
 		return (NULL);
 	i += offset;

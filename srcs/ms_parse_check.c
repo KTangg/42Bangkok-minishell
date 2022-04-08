@@ -6,21 +6,24 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 08:46:16 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 07:48:30 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 14:21:33 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void			valvarset(t_command *cmd, int ncmd);
+static t_command	*lst_checkfile(t_command *cmdlist);
 
 t_command	*checkcmdlst(t_command *cmdlist)
 {
 	t_command	*cur;
 	int			i;
 	char		*tmpcmd;
+	t_command	*newlist;
 
-	cur = cmdlist;
+	newlist = lst_checkfile(cmdlist);
+	cur = newlist;
 	while (cur)
 	{
 		i = 0;
@@ -34,7 +37,7 @@ t_command	*checkcmdlst(t_command *cmdlist)
 		}
 		cur = cur->next;
 	}
-	return (cmdlist);
+	return (newlist);
 }
 
 static void	valvarset(t_command *cmd, int firstcmd)
@@ -45,4 +48,24 @@ static void	valvarset(t_command *cmd, int firstcmd)
 			parsevarset(cmd->command[0], NULL);
 		cmd->command = lst_delcmd(cmd, cmd->command[0]);
 	}
+}
+
+static t_command	*lst_checkfile(t_command *cmdlist)
+{
+	t_command	*cur;
+	t_command	*newlist;
+	t_command	*next;
+
+	cur = cmdlist;
+	if (cur)
+		next = cur;
+	newlist = cmdlist;
+	while (next != NULL)
+	{
+		next = next->next;
+		if (cur->redirection >= 1 && cur->redirection <= 4)
+			newlist = lst_cmdfile(newlist, cur);
+		cur = next;
+	}
+	return (newlist);
 }

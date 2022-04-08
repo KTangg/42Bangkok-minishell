@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:15:11 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 07:47:42 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/08 15:02:15 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ char	*expand_var(char *line)
 	t_parexcp	p;
 	int			i;
 	int			varlen;
+	char		*varn;
+	char		*output;
 
-	p.sq_open = 0;
-	p.dq_open = 0;
-	p.p_open = 0;
+	init_parexcp(&p);
 	i = 0;
 	varlen = 0;
 	while (line[i])
@@ -35,15 +35,17 @@ char	*expand_var(char *line)
 		isquoting(line[i], &p);
 		if (line[i] == '$' && !p.sq_open && validvarn(line[i + 1], 0))
 		{
-			i++;
-			varlen = getvarlen(line + i, p.dq_open);
+			varlen = getvarlen(line + (++i), p.dq_open);
 			break ;
 		}
 		i++;
 	}
 	if (!line[i] || varlen == 0)
 		return (line);
-	return (expand_var(replacevar(line, i, varlen, getvarn(line + i, varlen))));
+	varn = getvarn(line + i, varlen);
+	output = expand_var(replacevar(line, i, varlen, varn));
+	free(varn);
+	return (output);
 }
 
 static int	getvarlen(char *line, int dq_open)
@@ -80,7 +82,7 @@ static char	*replacevar(char *line, int start, int oldlen, char *varname)
 	var_value = findvar(varname);
 	newlen = ft_strlen(var_value);
 	linelen = ft_strlen(line) + (newlen - oldlen);
-	newline = (char *)malloc((linelen + 1) * sizeof(char));
+	newline = (char *)malloc((linelen + 2) * sizeof(char));
 	i = -1;
 	while (++i < start - 1)
 		newline[i] = line[i];
