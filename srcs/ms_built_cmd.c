@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 17:38:26 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 20:33:31 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/09 06:25:24 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	cmd_pwd(char **argv)
 	if (!str)
 		return (-1);
 	printf("%s\n", str);
-	free(str);
 	return (0);
 }
 

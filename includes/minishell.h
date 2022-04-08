@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 20:25:22 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/09 09:48:30 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <signal.h>
 # include <unistd.h>
 # include <termios.h>
+# include <dirent.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
@@ -122,6 +125,8 @@ int			cmd_exit(char **argv);
 int			cmd_cd(char **argv);
 int			cmd_unset(char **argv);
 int			cmd_export(char **argv);
+int			cmd_pwd(char **argv);
+int			cmd_ls(char **argv);
 
 // Exec Helper
 int			is_pipe(t_command *cmd);

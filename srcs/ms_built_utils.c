@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 16:19:08 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 20:36:33 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/09 06:38:12 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,12 @@ int	check_built(char **argv, char **envp)
 		return (cmd_unset(argv));
 	else if (!ft_strcmp("export", argv[0]))
 		return (cmd_export(argv));
+	else if (!ft_strcmp("pwd", argv[0]))
+		return (cmd_pwd(argv));
 	else if (!ft_strcmp("exit", argv[0]))
 		return (cmd_exit(argv));
+	else if (!ft_strcmp("ls", argv[0]))
+		return (cmd_ls(argv));
 	return (1);
 }
 
