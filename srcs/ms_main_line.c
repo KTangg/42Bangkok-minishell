@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:12:32 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 16:41:59 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/11 18:23:29 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,30 +41,19 @@ static void	free_cmd_list(t_command	*cmd_list)
 	}
 }
 
-void	execute_line(t_command *cmd_list)
+bool	shell_line(char *line)
 {
-	g_wstatus = -1;
-	cmd_list = reverse_command(cmd_list);
-	g_pid = fork();
-	if (g_pid == 0)
-	{
-		section_execute(cmd_list);
-		exit(3);
-	}
-	wait(&g_wstatus);
-	free_cmd_list(cmd_list);
-}
+	bool		status;
+	t_command	*cmd_list;
 
-int	shell_line(char *line)
-{
-	t_command	*cmdlist;
-
-	cmdlist = parse_seqcmds(line);
-	if (!cmdlist)
-		return (-1);
+	status = false;
+	cmd_list = parse_seqcmds(line);
+	if (!cmd_list)
+		return (status);
 	if (getvar("DEBUG_MODE") && !ft_strcmp(getvar("DEBUG_MODE"), "1"))
-		print_cmdlst(cmdlist);
+		print_cmdlst(cmd_list);
 	else
-		execute_line(cmdlist);
-	return (0);
+		status = section_execute(cmd_list);
+	free_cmd_list(cmd_list);
+	return (status);
 }

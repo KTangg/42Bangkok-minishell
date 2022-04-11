@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_exec_redir.c                                    :+:      :+:    :+:   */
+/*   ms_redir_inout.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 21:21:04 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 16:42:04 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/11 17:43:57 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
-#include <sys/wait.h>
 #include "minishell.h"
 
 extern int dup_fd[2];
@@ -42,76 +41,50 @@ static void	hr_doc_input(char *end, int fd)
 	}
 }
 
-void	here_document(t_command *command_line, char **commamd)
+int	here_document(char *end)
 {
 	int	fd;
 
 	fd = open(HERE_DOCFILE, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
 	{
-		perror("heredoc");
-		return ;
+		perror("here document");
+		return (fd);
 	}
-	hr_doc_input(command_line->command[0], fd);
+	hr_doc_input(end, fd);
 	close(fd);
 	fd = open(HERE_DOCFILE, O_RDONLY, 0644);
 	if (fd < 0)
-	{
-		perror("heredoc");
-		return ;
-	}
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	redir_exec(command_line->next, commamd);
+		perror("here document");
+	return (fd);
 }
 
-void	redir_inp(t_command *command_line, char **commamd)
+int	redir_inp(char *path)
 {
 	int		fd;
-	char	*path;
 
-	path = command_line->command[0];
 	fd = open(path, O_RDONLY, 0644);
 	if (fd < 0)
-	{
 		perror(path);
-		return ;
-	}
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	redir_exec(command_line->next, commamd);
+	return (fd);
 }
 
-void	redir_out(t_command *command_line, char **commamd)
+int	redir_out(char *path)
 {
 	int		fd;
-	char	*path;
 
-	path = command_line->command[0];
 	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
-	{
 		perror(path);
-		return ;
-	}
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-	redir_exec(command_line->next, commamd);
+	return (fd);
 }
 
-void	redir_app(t_command *command_line, char **commamd)
+int	redir_app(char *path)
 {
 	int		fd;
-	char	*path;
 
-	path = command_line->command[0];
 	fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (fd < 0)
-	{
 		perror(path);
-		return ;
-	}
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-	redir_exec(command_line->next, commamd);
+	return (fd);
 }

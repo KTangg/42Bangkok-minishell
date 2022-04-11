@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 14:40:29 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/11 18:19:00 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <unistd.h>
+# include <stdbool.h>
 # include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
 
+// Define Redirection Code
 # define REDIRIN 1
 # define REDIROUT 2
 # define REDIRAPP 3
@@ -71,10 +73,11 @@ typedef struct s_parexcp {
 char		*getprompt(void);
 
 // Line Process Prototype
-int			shell_line(char *line);
+bool		shell_line(char *line);
 
 // Execute Process Prototype
-void		execute(char *argv[]);
+bool		execute_execve(char *argv[]);
+bool		redir_execute(t_command *command_line);
 
 // Split Process Prototype
 char		**split_args(const char *line, int len);
@@ -106,22 +109,26 @@ void		init_cmd(t_command *cmd);
 void		clean_cmdfiles(t_redirect *target);
 
 // Exec Helper
-int			is_pipe(t_command *cmd);
-int			is_logical(t_command *cmd);
-int			is_redirection(t_command *cmd);
-void		redir_exec(t_command *command_line, char **command);
+bool		check_execute(t_command *command_line);
+t_command	*reverse_command(t_command *command_line);
+t_redirect	*reverse_redirect(t_redirect *redirect);
 
 // Redirection Prototype
-void		redir_out(t_command *command_line, char **commamd);
-void		redir_app(t_command *command_line, char **commamd);
-void		redir_inp(t_command *command_line, char **commamd);
-void		here_document(t_command *command_line, char **commamd);
+int			redir_out(char *path);
+int			redir_app(char *path);
+int			redir_inp(char *path);
+int			here_document(char *end);
 
-// Pipe Prototype
-void		redir_pipe(t_command *left_cmd, t_command *right_cmd);
+// Pipe | Operation Prototype
+bool		redir_pipe(t_command *left_cmd, t_command *right_cmd);
+
+// And && Operation Prototype
+bool		redir_and(t_command *left_cmd, t_command *right_cmd);
+
+// Or || Operation Prototype
+bool		redir_or(t_command *left_cmd, t_command *right_cmd);
 
 // Section Command Prototype
-void		section_execute(t_command *cmd_section);
-t_command	**section_cmd(t_command *command_line);
+bool		section_execute(t_command *cmd_section);
 
 #endif

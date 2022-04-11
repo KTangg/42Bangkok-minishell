@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 18:04:16 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 16:42:06 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/11 18:23:33 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,30 @@ static char	*check_path(char *cmd)
 }
 
 // Find path and execute right executable file
-void	execute(char *argv[])
+bool	execute_execve(char *argv[])
 {
+	int		status;
+	pid_t	pid;
 	char	*cmd;
 	char	*path;
 
 	cmd = argv[0];
-	if (cmd == NULL)
-		exit(2);
 	path = check_path(cmd);
 	if (path == NULL)
-		exit(2);
-	execve(path, argv, NULL);
-	perror(path);
-	exit(2);
+		return (false);
+	pid = fork();
+	if (pid < 0)
+		perror("fork");
+	if (pid == 0)
+	{
+		execve(path, argv, NULL);
+		perror(path);
+		exit(EXIT_FAILURE);
+	}
+	else if (pid > 0)
+		waitpid(pid, &status, 0);
+	free(path);
+	if (status == 0)
+		return (true);
+	return (false);
 }

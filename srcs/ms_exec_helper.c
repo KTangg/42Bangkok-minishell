@@ -6,56 +6,50 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:39:59 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/07 16:42:06 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/11 18:23:33 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_redirection(t_command *cmd)
+t_redirect	*reverse_redirect(t_redirect *redirect)
 {
-	if (cmd == NULL)
-		return (0);
-	if (cmd->redirection >= REDIRIN && cmd->redirection <= REDIRHRE)
-		return (1);
-	return (0);
+	t_redirect	*prev;
+	t_redirect	*next;
+	t_redirect	*cursor;
+
+	if (redirect == NULL)
+		return (NULL);
+	prev = redirect;
+	cursor = redirect->next;
+	prev->next = NULL;
+	while (cursor != NULL)
+	{
+		next = cursor->next;
+		cursor->next = prev;
+		prev = cursor;
+		cursor = next;
+	}
+	return (prev);
 }
 
-int	is_pipe(t_command *cmd)
+t_command	*reverse_command(t_command *command_line)
 {
-	if (cmd == NULL)
-		return (0);
-	if (cmd->redirection == REPIPE)
-		return (1);
-	return (0);
-}
+	t_command	*prev;
+	t_command	*next;
+	t_command	*cursor;
 
-int	is_logical(t_command *cmd)
-{
-	if (cmd == NULL)
-		return (0);
-	if (cmd->redirection >= REAND && cmd->redirection <= REOR)
-		return (1);
-	return (0);
-}
-
-void	redir_exec(t_command *command_line, char **command)
-{
 	if (command_line == NULL)
-		execute(command);
-	if (is_redirection(command_line))
+		return (NULL);
+	prev = command_line;
+	cursor = command_line->next;
+	prev->next = NULL;
+	while (cursor != NULL)
 	{
-		if (command_line->redirection == REDIRIN)
-			redir_inp(command_line, command);
-		else if (command_line->redirection == REDIROUT)
-			redir_out(command_line, command);
-		else if (command_line->redirection == REDIRAPP)
-			redir_app(command_line, command);
-		else if (command_line->redirection == REDIRHRE)
-			here_document(command_line, command);
+		next = cursor->next;
+		cursor->next = prev;
+		prev = cursor;
+		cursor = next;
 	}
-	else
-	{
-		execute(command);
-	}
+	return (prev);
 }
