@@ -6,11 +6,14 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:11:24 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/11 18:15:45 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 16:22:37 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <sys/wait.h>
+
+extern t_ms_vars	*g_msvars;
 
 static int	get_fd_out(t_redirect *redirect)
 {
@@ -52,37 +55,10 @@ static int	get_fd_in(t_redirect *redirect)
 	return (fd);
 }
 
-static void	init_fd(int *fd, int *fd_dup)
+bool	redir_command(t_command *command_line)
 {
-	fd[0] = STDIN_FILENO;
-	fd[1] = STDOUT_FILENO;
-	fd_dup[0] = dup(fd[0]);
-	fd_dup[1] = dup(fd[1]);
-}
+	int	fd[2];
 
-static void	fd_reset(int *fd_dup)
-{
-	dup2(fd_dup[0], STDIN_FILENO);
-	dup2(fd_dup[1], STDOUT_FILENO);
-	close(fd_dup[0]);
-	close(fd_dup[1]);
-}
-
-bool	redir_execute(t_command *command_line)
-{
-	int		fd[2];
-	int		fd_dup[2];
-	bool	status;
-
-	init_fd(fd, fd_dup);
-	if (command_line->output != NULL)
-	{
-		fd[1] = get_fd_out(command_line->output);
-		if (fd[1] < 0)
-			return (false);
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
-	}
 	if (command_line->input != NULL)
 	{
 		fd[0] = get_fd_in(command_line->input);
@@ -91,7 +67,35 @@ bool	redir_execute(t_command *command_line)
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 	}
-	status = check_execute(command_line);
-	fd_reset(fd_dup);
-	return (status);
+	if (command_line->output != NULL)
+	{
+		fd[1] = get_fd_out(command_line->output);
+		if (fd[1] < 0)
+			return (false);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+	}
+	return (check_execute(command_line));
+}
+
+bool	redir_execute(t_command *command_line)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+		return (false);
+	if (pid == 0)
+	{
+		g_msvars->fork++;
+		status = redir_command(command_line);
+		if (status == false)
+			exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
+	}
+	waitpid(pid, &status, 0);
+	if (status == 0)
+		return (true);
+	return (false);
 }

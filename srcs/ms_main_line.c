@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:12:32 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/12 15:06:48 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 16:46:01 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,42 @@
 pid_t	g_pid = 1;
 int		g_wstatus = 0;
 
+static void	free_command(char **command)
+{
+	size_t	i;
+
+	i = 0;
+	while (command[i] != NULL)
+		free(command[i++]);
+	free(command);
+}
+
+static void	free_pipe(t_command *pipe_list)
+{
+	t_command	*tmp;
+	t_command	*next;
+
+	tmp = pipe_list;
+	while (tmp != NULL)
+	{
+		free_command(tmp->command);
+		next = tmp->next_pipe;
+		free(tmp);
+		tmp = next;
+	}
+}
+
 static void	free_cmd_list(t_command	*cmd_list)
 {
-	size_t		j;
 	t_command	*tmp;
 	t_command	*next;
 
 	tmp = cmd_list;
 	while (tmp != NULL)
 	{
-		j = 0;
-		while (tmp->command[j])
-		{
-			free(tmp->command[j]);
-			j++;
-		}
-		free(tmp->command);
+		free_command(tmp->command);
+		if (tmp->next_pipe != NULL)
+			free_pipe(tmp->next_pipe);
 		next = tmp->next;
 		free(tmp);
 		tmp = next;

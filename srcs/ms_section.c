@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:37:14 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/12 15:34:43 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 16:05:49 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,21 +76,7 @@ static t_command	*section_command(t_command *cmd_list)
 bool	section_execute(t_command *cmd_section)
 {
 	int		status;
-	pid_t	pid;
 
-	if (cmd_section->recursive == 1)
-	{
-		pid = fork();
-		if (pid == 0)
-		{
-			shell_line(cmd_section->command[0]);
-			exit(EXIT_SUCCESS);
-		}
-		waitpid(pid, &status, 0);
-		if (status == 0)
-			return (true);
-		return (false);
-	}
 	if (cmd_section->next_pipe != NULL)
 		status = redir_pipe(cmd_section->next_pipe, cmd_section);
 	else

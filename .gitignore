@@ -3,3 +3,4 @@ minishell
 objs
 test*
 *.json
+a.out

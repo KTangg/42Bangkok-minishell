@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 18:04:16 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/11 18:23:33 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 16:22:15 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ bool	execute_execve(char *argv[])
 		perror("fork");
 	if (pid == 0)
 	{
+		g_msvars->fork++;
 		execve(path, argv, NULL);
 		perror(path);
 		exit(EXIT_FAILURE);

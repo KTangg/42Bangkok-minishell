@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/12 15:20:08 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 16:24:29 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ typedef struct s_vars {
 }	t_vars;
 
 typedef struct s_ms_vars {
+	int		fork;
+	int		dup_fd[2];
+	int		status;
 	int		exit_status;
 	char	**environ;
 	t_vars	**env_lst;
@@ -77,6 +80,7 @@ char		*getprompt(void);
 bool		shell_line(char *line);
 
 // Execute Process Prototype
+bool		recursive_exec(char *line);
 bool		execute_execve(char *argv[]);
 bool		redir_execute(t_command *command_line);
 

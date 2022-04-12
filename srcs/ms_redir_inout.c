@@ -6,14 +6,14 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 21:21:04 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/12 15:48:44 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 16:31:45 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include "minishell.h"
 
-extern int	dup_fd[2];
+extern t_ms_vars	*g_msvars;
 
 static void	hr_doc_input(char *end, int fd)
 {
@@ -23,8 +23,8 @@ static void	hr_doc_input(char *end, int fd)
 
 	while (1)
 	{
-		ft_putstr_fd("> ", dup_fd[1]);
-		ret = read(dup_fd[0], line, 1024);
+		ft_putstr_fd("> ", g_msvars->dup_fd[1]);
+		ret = read(g_msvars->dup_fd[0], line, 1024);
 		if (ret == 0)
 		{
 			ft_putendl_fd("warning: here-document delimited by end-of-file",

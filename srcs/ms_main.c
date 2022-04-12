@@ -6,13 +6,12 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/11 18:23:26 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 16:47:20 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			dup_fd[2];
 t_ms_vars	*g_msvars;
 
 // Signal handling function
@@ -22,10 +21,16 @@ static void	sig_handle(int signo, siginfo_t *info, void *other)
 	(void)other;
 	if (signo == SIGINT)
 	{
-		rl_on_new_line();
+		if (g_msvars->fork != 0)
+			exit(EXIT_FAILURE);
 		printf("\n");
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (g_msvars->status == 0)
+		{
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
+		unlink(HERE_DOCFILE);
 		return ;
 	}
 	if (signo == SIGQUIT)
@@ -36,25 +41,15 @@ static void	sig_handle(int signo, siginfo_t *info, void *other)
 void	shell_exit(void)
 {
 	rl_clear_history();
+	close(g_msvars->dup_fd[0]);
+	close(g_msvars->dup_fd[1]);
 	ms_cleanup_global();
-	ft_putendl_fd("exit", dup_fd[1]);
-	close(dup_fd[0]);
-	close(dup_fd[1]);
+	ft_putendl_fd("exit", STDERR_FILENO);
 	exit(EXIT_SUCCESS);
 }
 
-// Initial terminal attribute
-// Not echo ctrl command
-static void	init_term(struct termios term)
-{
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, 0, &term);
-	dup_fd[0] = dup(STDIN_FILENO);
-	dup_fd[1] = dup(STDOUT_FILENO);
-}
-
-// Initial signal handler
-static void	init_signal(void)
+// Initial terminal attribute && signal && some global variable
+static void	init_shell(struct termios term)
 {
 	struct sigaction	sa;
 
@@ -63,6 +58,20 @@ static void	init_signal(void)
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, 0, &term);
+	g_msvars->fork = 0;
+	g_msvars->dup_fd[0] = dup(STDIN_FILENO);
+	g_msvars->dup_fd[1] = dup(STDOUT_FILENO);
+}
+
+static void	clear_variable(char *line, char *prompt)
+{
+	if (line)
+		free(line);
+	if (prompt)
+		free(prompt);
+	unlink(HERE_DOCFILE);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -76,22 +85,20 @@ int	main(int argc, char **argv, char **envp)
 	init_global(envp);
 	setshell(argv[0]);
 	tcgetattr(STDIN_FILENO, &term);
-	init_term(term);
-	init_signal();
+	init_shell(term);
 	while (1)
 	{
 		prompt = getprompt();
+		g_msvars->status = 0;
 		line = readline(prompt);
 		if (!line)
 			shell_exit();
 		if (line[0] != '\0')
 		{
 			add_history(line);
+			g_msvars->status = 1;
 			shell_line(line);
 		}
-		unlink(HERE_DOCFILE);
-		free(line);
-		free(prompt);
+		clear_variable(line, prompt);
 	}
-	shell_exit();
 }
