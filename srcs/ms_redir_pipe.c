@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:17:40 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/11 18:15:47 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 15:49:01 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,29 @@ static void	left_pipe_execute(t_command *command_line, int *pipefd)
 
 bool	redir_pipe(t_command *left_cmd, t_command *right_cmd)
 {
-	pid_t	pid;
+	int		status;
+	pid_t	pid[2];
 	int		pipefd[2];
 
-	if (pipe(pipefd) != 0)
-	{
-		perror("pipe");
+	pid[0] = fork();
+	if (pid[0] == -1)
 		return (false);
-	}
-	pid = fork();
-	if (pid == -1)
+	if (pid[0] == 0)
 	{
-		perror("fork");
-		return (false);
+		if (pipe(pipefd) != 0)
+			exit(EXIT_FAILURE);
+		pid[1] = fork();
+		if (pid[1] == -1)
+			exit(EXIT_FAILURE);
+		if (pid[1] == 0)
+			left_pipe_execute(left_cmd, pipefd);
+		status = right_pipe_execute(right_cmd, pipefd, pid[1]);
+		if (status == false)
+			exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
-	if (pid == 0)
-		left_pipe_execute(left_cmd, pipefd);
-	return (right_pipe_execute(right_cmd, pipefd, pid));
+	waitpid(pid[0], &status, 0);
+	if (status == false)
+		return (true);
+	return (false);
 }

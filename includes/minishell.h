@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/11 18:19:00 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 15:20:08 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_command {
 	char				**command;
 	int					recursive;
 	struct s_command	*next;
+	struct s_command	*next_pipe;
 }	t_command;
 
 typedef struct s_vars {
@@ -130,5 +131,6 @@ bool		redir_or(t_command *left_cmd, t_command *right_cmd);
 
 // Section Command Prototype
 bool		section_execute(t_command *cmd_section);
+bool		section_list(t_command *cmd_list);
 
 #endif

@@ -6,14 +6,14 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 21:21:04 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/11 17:43:57 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 15:48:44 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include "minishell.h"
 
-extern int dup_fd[2];
+extern int	dup_fd[2];
 
 static void	hr_doc_input(char *end, int fd)
 {

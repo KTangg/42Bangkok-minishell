@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:12:32 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/11 18:23:29 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/12 15:06:48 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 
 pid_t	g_pid = 1;
 int		g_wstatus = 0;
-
-t_command	*reverse_command(t_command *command_line);
 
 static void	free_cmd_list(t_command	*cmd_list)
 {
@@ -53,7 +51,7 @@ bool	shell_line(char *line)
 	if (getvar("DEBUG_MODE") && !ft_strcmp(getvar("DEBUG_MODE"), "1"))
 		print_cmdlst(cmd_list);
 	else
-		status = section_execute(cmd_list);
+		status = section_list(cmd_list);
 	free_cmd_list(cmd_list);
 	return (status);
 }
