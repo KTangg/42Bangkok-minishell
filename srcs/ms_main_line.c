@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_main_line.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:12:32 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/12 16:46:01 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/15 11:14:38 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 pid_t	g_pid = 1;
 int		g_wstatus = 0;
+extern t_ms_vars	*g_msvars;
 
 static void	free_command(char **command)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/12 16:24:29 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/15 11:12:33 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include <termios.h>
+# include <dirent.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
@@ -75,6 +78,7 @@ typedef struct s_parexcp {
 }	t_parexcp;
 
 char		*getprompt(void);
+void		shell_exit(void);
 
 // Line Process Prototype
 bool		shell_line(char *line);
@@ -85,33 +89,52 @@ bool		execute_execve(char *argv[]);
 bool		redir_execute(t_command *command_line);
 
 // Split Process Prototype
-char		**split_args(const char *line, int len);
-int			checkredir(const char *line, int len);
-t_command	*parse_seqcmds(char *line);
-int			isredir(const char c);
-int			getcmdlen(const char *line, int *pos, int *recursive);
 t_ms_vars	*init_global(char **envp);
-void		app_var(t_vars **lst, char *index, char *value);
-void		print_varlist(t_vars **lst);
-int			isquoting(char c, t_parexcp *p);
-char		*expand_var(char *line);
-int			validvarn(char c, int pos);
+t_command	*parse_seqcmds(char *line);
 t_command	*checkcmdlst(t_command *cmdlist);
-void		setvar(char *index, char *value, t_vars **lst);
-int			isvarset(char *cmd);
-char		**lst_delcmd(t_command *cmdlist, char *cmd);
 t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur);
-char		*getvar(char *index);
+void		print_varlist(t_vars **lst);
 void		print_cmdlst(t_command *cmdlist);
 void		print_synterr(const char *str);
-char		*getshell(void);
 void		setshell(char *name);
-void		parsevarset(char *cmd, t_vars **lst);
-void		unsetvar(char *index);
 void		init_parexcp(t_parexcp *p);
 void		ms_cleanup_global(void);
 void		init_cmd(t_command *cmd);
 void		clean_cmdfiles(t_redirect *target);
+void		built_printerr(char *cmd, char *arg);
+char		**split_args(const char *line, int len);
+char		**lst_delcmd(t_command *cmdlist, char *cmd);
+char		*getshell(void);
+int			checkredir(const char *line, int len);
+int			isredir(const char c);
+int			getcmdlen(const char *line, int *pos, int *recursive);
+int			isquoting(char c, t_parexcp *p);
+
+// Variables Handling Prototypes
+void		app_var(t_vars **lst, char *index, char *value);
+void		setvar(char *index, char *value, t_vars **lst);
+void		parsevarset(char *cmd, t_vars **lst);
+void		unsetvar(char *index, int lst);
+void		set_environ(char *index, char *value);
+void		add_environ(char *index, char *value, int size);
+void		cmd_varerr(char *cmd, char *arg);
+char		*expand_var(char *line);
+char		*getvar(char *index);
+int			validvarn(char c, int pos);
+int			isvarset(char *cmd);
+int			getarrsize(char **arr);
+int			check_varn(char *name);
+
+// Builtin Commands Prototypes
+int			check_built(char **argv, char **envp);
+int			cmd_env(char **argv, char **envp);
+int			cmd_echo(char **argv, char **envp);
+int			cmd_exit(char **argv);
+int			cmd_cd(char **argv);
+int			cmd_unset(char **argv);
+int			cmd_export(char **argv);
+int			cmd_pwd(char **argv);
+int			cmd_ls(char **argv);
 
 // Exec Helper
 bool		check_execute(t_command *command_line);
