@@ -6,17 +6,16 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 00:03:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 08:27:43 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 18:54:58 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char		**split_args(const char *line, int len);
-static char	*skipquote(const char *str, int len);
 static int	getargc(const char *line, int len);
 static char	*getargv(const char *line, int len, int *offset);
-static char	*skipquote(const char *str, int len);
+static char	*strargv(const char *str, int len);
 
 char	**split_args(const char *line, int len)
 {
@@ -81,22 +80,20 @@ static char	*getargv(const char *line, int len, int *offset)
 	arg_off = -(!!(*offset));
 	while (line[*offset] && *offset < len)
 	{
-		if (isquoting(line[*offset], &parexcp))
-			arg_off--;
-		else if (line[*offset] == ' ' && !parexcp.any_open)
+		isquoting(line[*offset], &parexcp);
+		if (line[*offset] == ' ' && !parexcp.any_open)
 		{
 			while (line[*offset] == ' ')
 				arg_off -= !!((*offset)++);
 			break ;
 		}
-		else if (!(!parexcp.any_open && isredir(line[*offset])))
-			arg_len++;
+		arg_len++;
 		(*offset)++;
 	}
-	return (skipquote(line + arg_off + *offset - arg_len, arg_len));
+	return (strargv(line + arg_off + *offset - arg_len, arg_len));
 }
 
-static char	*skipquote(const char *str, int len)
+static char	*strargv(const char *str, int len)
 {
 	char		*output;
 	int			i;
@@ -109,8 +106,9 @@ static char	*skipquote(const char *str, int len)
 		return (NULL);
 	while (i < len && *str)
 	{
-		if (isquoting(*str, &parexcp))
+		while (*str == ' ' && !parexcp.any_open)
 			str++;
+		isquoting(*str, &parexcp);
 		if (parexcp.any_open)
 			output[i++] = *str;
 		else if (*str != ' ' && !parexcp.any_open)

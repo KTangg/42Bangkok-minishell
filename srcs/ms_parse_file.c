@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:26:57 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 14:47:45 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 20:31:29 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ static void	lst_insfout(t_command *target, t_command *cur)
 
 // Insert file in into front of list
 // The resulting file redirection will have the redirect flag set:
-// 1 - File is a target for file in ('>')
-// 2 - File is a target for appending ('>>')
+// 1 - File is a target for file in ('<')
+// 2 - File is a target for appending ('<<')
 static void	lst_insiout(t_command *target, t_command *cur)
 {
 	if (target->input == NULL)

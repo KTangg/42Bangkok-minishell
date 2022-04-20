@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 08:46:16 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 20:35:13 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 19:02:24 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void			valvarset(t_command *cmd, int ncmd);
 static t_command	*lst_checkfile(t_command *cmdlist);
+static void			fin_cmdlist(t_command *cmdlist);
 
 t_command	*checkcmdlst(t_command *cmdlist)
 {
@@ -22,8 +23,7 @@ t_command	*checkcmdlst(t_command *cmdlist)
 	char		*tmpcmd;
 	t_command	*newlist;
 
-	newlist = lst_checkfile(cmdlist);
-	cur = newlist;
+	cur = cmdlist;
 	while (cur)
 	{
 		i = 0;
@@ -37,7 +37,22 @@ t_command	*checkcmdlst(t_command *cmdlist)
 		}
 		cur = cur->next;
 	}
+	newlist = lst_checkfile(cmdlist);
+	fin_cmdlist(newlist);
 	return (newlist);
+}
+
+static void	fin_cmdlist(t_command *cmdlist)
+{
+	t_command	*cur;
+
+	cur = cmdlist;
+	while (cur)
+	{
+		cur->command = get_wild(cur->command);
+		strip_quote(cur->command);
+		cur = cur->next;
+	}
 }
 
 static void	valvarset(t_command *cmd, int firstcmd)
@@ -64,7 +79,10 @@ static t_command	*lst_checkfile(t_command *cmdlist)
 	{
 		next = next->next;
 		if (cur->redirection >= 1 && cur->redirection <= 4)
+		{
+			*(cur->command) = strip_cmd(*(cur->command));
 			newlist = lst_cmdfile(newlist, cur);
+		}
 		cur = next;
 	}
 	return (newlist);

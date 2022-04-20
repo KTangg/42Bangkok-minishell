@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/15 11:12:33 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 19:49:40 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,20 @@ void		unsetvar(char *index, int lst);
 void		set_environ(char *index, char *value);
 void		add_environ(char *index, char *value, int size);
 void		cmd_varerr(char *cmd, char *arg);
+void		strip_quote(char **cmdlist);
+void		print_wilderr(const char *str);
 char		*expand_var(char *line);
 char		*getvar(char *index);
+char		**get_wild(char **cmdchain);
+char		**arr_app(char **chain, char **newcmd);
+char		**cmd_app(char **arr, char *str);
+char		*strip_cmd(char *cmd);
 int			validvarn(char c, int pos);
 int			isvarset(char *cmd);
 int			getarrsize(char **arr);
 int			check_varn(char *name);
+int			check_wild(char *cmd);
+int			checkrepeat(char **arr, int size, char *str);
 
 // Builtin Commands Prototypes
 int			check_built(char **argv, char **envp);

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:12:32 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/15 11:14:38 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 16:57:37 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ bool	shell_line(char *line)
 	if (getvar("DEBUG_MODE") && !ft_strcmp(getvar("DEBUG_MODE"), "1"))
 		print_cmdlst(cmd_list);
 	else
+	{
 		status = section_list(cmd_list);
-	free_cmd_list(cmd_list);
+		free_cmd_list(cmd_list);
+	}
 	return (status);
 }

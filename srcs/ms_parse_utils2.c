@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 09:40:40 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/07 08:14:04 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 17:18:45 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,9 @@ int	getcmdlen(const char *line, int *pos, int *recursive)
 	int			cmd_len;
 	t_parexcp	parexcp;
 
-	parexcp.sq_open = 0;
-	parexcp.dq_open = 0;
 	cmd_len = 0;
-	parexcp.p_open = 0;
-	parexcp.any_open = 0;
 	*recursive = 0;
+	init_parexcp(&parexcp);
 	while (line[*pos] && ((!isredir(line[*pos]) && !parexcp.p_open) \
 	|| parexcp.any_open))
 	{

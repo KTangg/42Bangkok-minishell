@@ -5,93 +5,122 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/09 06:38:30 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/09 09:49:21 by tratanat         ###   ########.fr       */
+/*   Created: 2022/04/20 14:25:48 by tratanat          #+#    #+#             */
+/*   Updated: 2022/04/20 20:25:13 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ls_print(char *filename);
-static int	ls_flags(char **argv);
-static void	ls_color(struct dirent *finfo);
+static char	**expand_wild(char *cmd);
+static char	**get_wild_any(void);
+static char	**getsorted(char **unsorted);
 
-int	cmd_ls(char **argv)
+char	**get_wild(char **cmdchain)
+{
+	int		size;
+	int		i;
+	char	**newcmd;
+	char	**newchain;
+
+	if (!cmdchain || !(*cmdchain))
+		return (cmdchain);
+	size = getarrsize(cmdchain);
+	i = 0;
+	newchain = NULL;
+	while (i < size)
+	{
+		if (check_wild(cmdchain[i]))
+		{
+			newcmd = expand_wild(cmdchain[i]);
+			newchain = arr_app(newchain, newcmd);
+		}
+		else
+			newchain = cmd_app(newchain, cmdchain[i]);
+		free(cmdchain[i]);
+		i++;
+	}
+	free(cmdchain);
+	return (newchain);
+}
+
+int	check_wild(char *cmd)
+{
+	t_parexcp	parexcp;
+
+	init_parexcp(&parexcp);
+	while (*cmd)
+	{
+		isquoting(*cmd, &parexcp);
+		if (*cmd == '*' && !parexcp.any_open)
+			return (1);
+		cmd++;
+	}
+	return (0);
+}
+
+static char	**expand_wild(char *cmd)
+{
+	char		**newlst;
+
+	newlst = NULL;
+	if (!ft_strcmp(cmd, "*"))
+	{
+		return (get_wild_any());
+	}
+	else
+		return (cmd_app(newlst, cmd));
+}
+
+static char	**get_wild_any(void)
 {
 	void			*fd;
 	char			path[1024];
 	struct dirent	*finfo;
-	int				flags;
+	char			**newlst;
 
-	flags = ls_flags(argv);
-	if (flags <= 0)
-		return (flags);
+	newlst = NULL;
 	fd = opendir(getcwd(path, 1024));
 	if (!fd)
-		return (-1);
+		return (NULL);
 	finfo = readdir(fd);
 	while (finfo)
 	{
-		ls_color(finfo);
-		ls_print(finfo->d_name);
-		printf("\e[0m");
+		newlst = cmd_app(newlst, finfo->d_name);
+		if (!newlst)
+			return (NULL);
 		finfo = readdir(fd);
+		while (finfo && finfo->d_name[0] == '.')
+			finfo = readdir(fd);
 	}
-	ls_print(NULL);
 	closedir(fd);
-	return (0);
+	newlst = getsorted(newlst);
+	return (newlst);
 }
 
-static void	ls_color(struct dirent *finfo)
+static char	**getsorted(char **unsorted)
 {
-	struct stat	f_stat;
+	char	**sorted;
+	char	*low;
+	int		pos;
+	int		i;
 
-	if (finfo->d_type == DT_DIR)
-		printf("\e[1;34m");
-	else if (stat(finfo->d_name, &f_stat) == 0)
-		if (f_stat.st_mode && (f_stat.st_mode & S_IXUSR))
-			printf("\e[1;32m");
-	return ;
-}
-
-static int	ls_flags(char **argv)
-{
-	int	check;
-
-	if (!argv[1])
-		return (1);
-	check = (!ft_strcmp(argv[1], "-v") || !ft_strcmp(argv[1], "--version"));
-	if (argv[1] && check && !argv[2])
+	pos = 0;
+	sorted = (char **)malloc((getarrsize(unsorted) + 1) * sizeof(char *));
+	while (pos < getarrsize(unsorted))
 	{
-		printf("--- ls ---\n");
-		printf("built-in function of 42 project's minishell\n");
-		return (0);
+		i = 0;
+		while (pos > 0 && checkrepeat(sorted, pos, unsorted[i]))
+			i++;
+		low = unsorted[i];
+		while (i++ < getarrsize(unsorted))
+			if (ft_strcmp(low, unsorted[i - 1]) > 0)
+				if (pos == 0 || ft_strcmp(unsorted[i - 1], sorted[pos - 1]) > 0)
+					if (pos == 0 || !checkrepeat(sorted, pos, unsorted[i - 1]))
+						low = unsorted[i - 1];
+		sorted[pos++] = low;
 	}
-	else if (argv[1])
-		return (-1);
-	return (1);
-}
-
-static void	ls_print(char *filename)
-{
-	static int	column = 0;
-
-	if (!filename)
-	{
-		column = 0;
-		printf("\n");
-		return ;
-	}
-	if (filename[0] != '.')
-	{
-		printf("%-20s", filename);
-		column++;
-	}
-	else
-		return ;
-	if (column > 7)
-	{
-		column = 0;
-		printf("\n");
-	}
+	sorted[pos] = NULL;
+	free(unsorted);
+	return (sorted);
 }
