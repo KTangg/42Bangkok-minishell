@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 22:34:04 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 06:48:00 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,8 @@ int			check_wild(char *cmd);
 int			checkrepeat(char **arr, int size, char *str);
 
 // Builtin Commands Prototypes
-int			check_built(char **argv, char **envp);
+int			is_builtin(char **cmdchain);
+int			execute_built(char **argv);
 int			cmd_env(char **argv, char **envp);
 int			cmd_echo(char **argv, char **envp);
 int			cmd_exit(char **argv);

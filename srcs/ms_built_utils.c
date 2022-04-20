@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 16:19:08 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/09 06:38:12 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 06:47:47 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,37 @@ static void	mov_var(char *name);
 
 extern t_ms_vars	*g_msvars;
 
-int	check_built(char **argv, char **envp)
+int	is_builtin(char **cmdchain)
 {
+	char	*cmd;
+
+	cmd = cmdchain[0];
+	if (!cmd)
+		return (0);
+	if (!ft_strcmp("env", cmd))
+		return (1);
+	else if (!ft_strcmp("echo", cmd))
+		return (1);
+	else if (!ft_strcmp("cd", cmd))
+		return (1);
+	else if (!ft_strcmp("unset", cmd))
+		return (1);
+	else if (!ft_strcmp("export", cmd))
+		return (1);
+	else if (!ft_strcmp("pwd", cmd))
+		return (1);
+	else if (!ft_strcmp("exit", cmd))
+		return (1);
+	else if (!ft_strcmp("ls", cmd))
+		return (1);
+	return (0);
+}
+
+int	execute_built(char **argv)
+{
+	char	**envp;
+
+	envp = g_msvars->environ;
 	if (!argv || !(*argv))
 		return (0);
 	if (!ft_strcmp("env", argv[0]))
@@ -70,20 +99,6 @@ static void	mov_var(char *name)
 		return ;
 	setvar(temp->index, temp->value, g_msvars->var_lst);
 	unsetvar(name, 2);
-}
-
-void	cmd_varerr(char *cmd, char *arg)
-{
-	char	*shell;
-
-	shell = getshell();
-	ft_putstr_fd(shell, 2);
-	free(shell);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": `", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd("\': not a valid identifier\n", 2);
 }
 
 int	check_varn(char *name)

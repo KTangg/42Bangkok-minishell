@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exec_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:18:53 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/12 16:37:43 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/21 06:48:14 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,8 @@ bool	check_execute(t_command *command_line)
 		return (recursive_exec(command_line->command[0]));
 	else
 	{
-		/*if (is_builtin(command_line->command))
-			return (execute_builtin(command_line));
-		else
-			return (execute_execve(command_line));*/
+		if (is_builtin(command_line->command))
+			return (execute_built(command_line->command));
 		return (execute_execve(command_line->command));
 	}
 }

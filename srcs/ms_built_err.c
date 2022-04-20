@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 16:12:58 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/09 07:20:15 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 06:40:36 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,18 @@ void	built_printerr(char *cmd, char *arg)
 	else
 		ft_putstr_fd(arg, 2);
 	ft_putstr_fd("\'\n", 2);
+}
+
+void	cmd_varerr(char *cmd, char *arg)
+{
+	char	*shell;
+
+	shell = getshell();
+	ft_putstr_fd(shell, 2);
+	free(shell);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": `", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd("\': not a valid identifier\n", 2);
 }
