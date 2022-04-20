@@ -6,14 +6,13 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:25:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 20:25:13 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 23:18:54 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static char	**expand_wild(char *cmd);
-static char	**get_wild_any(void);
 static char	**getsorted(char **unsorted);
 
 char	**get_wild(char **cmdchain)
@@ -63,16 +62,18 @@ static char	**expand_wild(char *cmd)
 {
 	char		**newlst;
 
-	newlst = NULL;
 	if (!ft_strcmp(cmd, "*"))
-	{
 		return (get_wild_any());
+	newlst = get_wild_patt(cmd);
+	if (!newlst)
+	{
+		newlst = (char **)malloc(sizeof(char *));
+		*newlst = NULL;
 	}
-	else
-		return (cmd_app(newlst, cmd));
+	return (newlst);
 }
 
-static char	**get_wild_any(void)
+char	**get_wild_any(void)
 {
 	void			*fd;
 	char			path[1024];

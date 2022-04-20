@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 01:17:24 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/03 10:58:15 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 21:34:33 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 int			getdigit(long int n);
 long int	ft_abs(long int n);
 int			ft_strcmp(char *s1, char *s2);
+char		*ft_strstr(char	*hay, char *needle);
 
 #endif

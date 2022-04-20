@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 08:46:16 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 19:02:24 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 00:15:19 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,7 @@ static t_command	*lst_checkfile(t_command *cmdlist)
 	{
 		next = next->next;
 		if (cur->redirection >= 1 && cur->redirection <= 4)
-		{
-			*(cur->command) = strip_cmd(*(cur->command));
 			newlist = lst_cmdfile(newlist, cur);
-		}
 		cur = next;
 	}
 	return (newlist);

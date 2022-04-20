@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 11:15:44 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 20:09:27 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 22:04:38 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,12 @@ char	**arr_app(char **chain, char **newcmd)
 
 	i = 0;
 	j = 0;
-	newsize = getarrsize(chain) + getarrsize(newcmd);
+	if (!chain)
+		newsize = getarrsize(newcmd);
+	else
+		newsize = getarrsize(chain) + getarrsize(newcmd);
 	newarr = (char **)malloc((newsize + 1) * sizeof(char *));
-	while (i < getarrsize(chain))
+	while (chain && i < getarrsize(chain))
 	{
 		newarr[i] = chain[i];
 		i++;

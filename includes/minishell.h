@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 19:49:40 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/20 22:34:04 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,12 @@ typedef struct s_parexcp {
 	int	any_open;
 }	t_parexcp;
 
+typedef struct s_searched {
+	char	*str;
+	int		searched;
+	int		viable;
+}	t_searched;
+
 char		*getprompt(void);
 void		shell_exit(void);
 
@@ -126,6 +132,8 @@ char		**get_wild(char **cmdchain);
 char		**arr_app(char **chain, char **newcmd);
 char		**cmd_app(char **arr, char *str);
 char		*strip_cmd(char *cmd);
+char		**get_wild_any(void);
+char		**get_wild_patt(char *cmd);
 int			validvarn(char c, int pos);
 int			isvarset(char *cmd);
 int			getarrsize(char **arr);

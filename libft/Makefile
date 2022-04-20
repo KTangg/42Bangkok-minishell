@@ -6,7 +6,7 @@
 #    By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/15 23:45:11 by tratanat          #+#    #+#              #
-#    Updated: 2022/04/03 10:58:26 by tratanat         ###   ########.fr        #
+#    Updated: 2022/04/20 21:34:11 by tratanat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,8 @@ SRCS = ft_atoi.c	\
 	ft_itoa_u.c	\
 	get_next_line.c	\
 	get_next_line_utils.c	\
-	ft_strcmp.c
+	ft_strcmp.c	\
+	ft_strstr.c
 
 NAME = libft.a
 CC = gcc -Wextra -Wall -Werror -std=c99
