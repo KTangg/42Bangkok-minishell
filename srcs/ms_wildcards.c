@@ -6,13 +6,12 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:25:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 23:18:54 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 13:29:04 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**expand_wild(char *cmd);
 static char	**getsorted(char **unsorted);
 
 char	**get_wild(char **cmdchain)
@@ -58,7 +57,7 @@ int	check_wild(char *cmd)
 	return (0);
 }
 
-static char	**expand_wild(char *cmd)
+char	**expand_wild(char *cmd)
 {
 	char		**newlst;
 

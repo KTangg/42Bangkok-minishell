@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 11:35:42 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 07:36:28 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 13:53:37 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_ms_vars	*init_global(char **envp)
 		parsevarset(ms_global->environ[i++], ms_global->env_lst);
 	}
 	(ms_global->environ)[i] = NULL;
+	set_shlvl();
 	return (ms_global);
 }
 

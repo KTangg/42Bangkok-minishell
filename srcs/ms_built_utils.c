@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 16:19:08 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 07:53:45 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 13:44:31 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	check_varn(char *name)
 	i = 0;
 	while (name[i])
 	{
-		if (!validvarn(name[i], i))
+		if (!validvarn(name[i], i, 0))
 			return (0);
 		i++;
 	}

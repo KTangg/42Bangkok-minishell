@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:26:57 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 00:16:22 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 13:50:01 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	lst_cmdapp(t_command *cmd, char **toapp);
 static void	lst_insfout(t_command *target, t_command *cur);
 static void	lst_insiout(t_command *target, t_command *cur);
+static char	*checkfilewild(char *cmd, int *iswild);
 
 t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur)
 {
@@ -49,16 +50,17 @@ t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur)
 // 2 - File is a target for appending ('>>')
 static void	lst_insfout(t_command *target, t_command *cur)
 {
-	int	invalid;
+	char	*wild;
+	int		iswild;
 
-	invalid = check_wild(cur->command[0]);
+	wild = checkfilewild(cur->command[0], &iswild);
 	*(cur->command) = strip_cmd(*(cur->command));
 	if (target->output == NULL)
 	{
 		target->output = (t_redirect *)malloc(sizeof(t_redirect));
-		if (invalid)
+		if (iswild)
 		{
-			target->output->file = NULL;
+			target->output->file = wild;
 			print_wilderr(*(cur->command));
 		}
 		else
@@ -79,16 +81,17 @@ static void	lst_insfout(t_command *target, t_command *cur)
 // 2 - File is a target for appending ('<<')
 static void	lst_insiout(t_command *target, t_command *cur)
 {
-	int	invalid;
+	int		iswild;
+	char	*wild;
 
-	invalid = check_wild(cur->command[0]);
+	wild = checkfilewild(cur->command[0], &iswild);
 	*(cur->command) = strip_cmd(*(cur->command));
 	if (target->input == NULL)
 	{
 		target->input = (t_redirect *)malloc(sizeof(t_redirect));
-		if (invalid)
+		if (iswild)
 		{
-			target->output->file = NULL;
+			target->output->file = wild;
 			print_wilderr(*(cur->command));
 		}
 		else
@@ -129,4 +132,32 @@ static void	lst_cmdapp(t_command *cmd, char **toapp)
 	newargv[arr_size] = toapp[i];
 	free(cmd->command);
 	cmd->command = newargv;
+}
+
+static char	*checkfilewild(char *cmd, int *iswild)
+{
+	char	**filelist;
+	int		size;
+	int		i;
+	char	*output;
+
+	i = 0;
+	*iswild = check_wild(cmd);
+	filelist = expand_wild(cmd);
+	size = getarrsize(filelist);
+	if (size > 1)
+	{
+		while (i < size)
+			free(filelist[i++]);
+		free(filelist);
+		return (NULL);
+	}
+	else if (size == 1)
+	{
+		output = filelist[0];
+		free(filelist);
+		return (output);
+	}
+	*iswild = 0;
+	return (NULL);
 }
