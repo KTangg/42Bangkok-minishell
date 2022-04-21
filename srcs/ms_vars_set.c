@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 18:55:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 22:36:23 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 08:33:29 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	isvarset(char *cmd)
 	{
 		if (i > 0 && cmd[i] == '=')
 			return (1);
-		if (!validvarn(cmd[i], i))
+		if (!validvarn(cmd[i], i, 1))
 			return (0);
 		i++;
 	}
@@ -64,7 +64,7 @@ void	setvar(char *index, char *value, t_vars **lst)
 	if (!lst || temp == *lst)
 		while (temp && ft_strcmp(temp->index, index))
 			temp = temp->next;
-	if (temp)
+	if (temp && (!lst || lst == g_msvars->env_lst))
 		set_environ(index, value);
 	if ((!lst && temp == NULL) || lst == g_msvars->var_lst)
 	{

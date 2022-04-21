@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 06:48:00 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 08:34:30 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ bool		shell_line(char *line);
 bool		recursive_exec(char *line);
 bool		execute_execve(char *argv[]);
 bool		redir_execute(t_command *command_line);
+bool		execute_final(t_command *command_line);
 
 // Split Process Prototype
 t_ms_vars	*init_global(char **envp);
@@ -134,7 +135,7 @@ char		**cmd_app(char **arr, char *str);
 char		*strip_cmd(char *cmd);
 char		**get_wild_any(void);
 char		**get_wild_patt(char *cmd);
-int			validvarn(char c, int pos);
+int			validvarn(char c, int pos, int set);
 int			isvarset(char *cmd);
 int			getarrsize(char **arr);
 int			check_varn(char *name);

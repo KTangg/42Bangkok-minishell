@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:15:11 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 15:02:15 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 08:56:50 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*expand_var(char *line)
 	while (line[i])
 	{
 		isquoting(line[i], &p);
-		if (line[i] == '$' && !p.sq_open && validvarn(line[i + 1], 0))
+		if (line[i] == '$' && !p.sq_open && validvarn(line[i + 1], 0, 0))
 		{
 			varlen = getvarlen(line + (++i), p.dq_open);
 			break ;
@@ -53,17 +53,21 @@ static int	getvarlen(char *line, int dq_open)
 	int	varlen;
 
 	varlen = 0;
+	if (line[0] == '?')
+		return (1);
 	while (!(line[varlen] == ' ') && line[varlen] && !dq_open)
 	{
-		if (!validvarn(line[varlen], 1))
+		if (!validvarn(line[varlen], 1, 0))
 			break ;
 		varlen++;
+		if (varlen == 1 && line[0] == '?')
+			break ;
 	}
 	if (dq_open)
 	{
 		while (!(line[varlen] == '\"' || line[varlen] == ' ') && line[varlen])
 		{
-			if (!validvarn(line[varlen], 1))
+			if (!validvarn(line[varlen], 1, 0))
 				break ;
 			varlen++;
 		}
@@ -126,6 +130,8 @@ static char	*getvarn(char *line, int varlen)
 	char	*varname;
 	int		i;
 
+	if (varlen == 1 && *line == '?')
+		setvar("?", ft_itoa(g_msvars->exit_status), g_msvars->var_lst);
 	i = 0;
 	varname = (char *)malloc((varlen + 1) * sizeof(char));
 	while (i < varlen)

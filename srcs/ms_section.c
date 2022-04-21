@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:37:14 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/21 06:52:23 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 07:32:35 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,21 @@ static t_command	*section_command(t_command *cmd_list)
 bool	section_execute(t_command *cmd_section)
 {
 	int		status;
+	int		exit;
 
+	exit = 0;
 	if (cmd_section->next_pipe != NULL)
 		status = redir_pipe(cmd_section->next_pipe, cmd_section);
+	else if (!cmd_section->output && !cmd_section->input)
+		status = execute_final(cmd_section);
 	else
+	{
+		if (!ft_strcmp(*cmd_section->command, "exit"))
+			exit = 1;
 		status = redir_execute(cmd_section);
+		if (exit)
+			shell_exit();
+	}
 	return (status);
 }
 

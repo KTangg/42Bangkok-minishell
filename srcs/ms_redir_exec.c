@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_redir_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:11:24 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/12 16:22:37 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/21 07:58:31 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,20 @@ bool	redir_execute(t_command *command_line)
 		exit(EXIT_SUCCESS);
 	}
 	waitpid(pid, &status, 0);
+	if (status == 0)
+		return (true);
+	return (false);
+}
+
+bool	execute_final(t_command *command_line)
+{
+	int		status;
+
+	if (command_line == NULL)
+		return (false);
+	if (*command_line->command == NULL)
+		return (true);
+	status = redir_command(command_line);
 	if (status == 0)
 		return (true);
 	return (false);

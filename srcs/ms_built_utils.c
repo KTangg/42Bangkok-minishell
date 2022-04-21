@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 16:19:08 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 06:47:47 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 07:53:45 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static void	mov_var(char *name)
 		temp = temp->next;
 	if (temp == NULL)
 		return ;
-	setvar(temp->index, temp->value, g_msvars->var_lst);
+	setvar(temp->index, temp->value, g_msvars->env_lst);
 	unsetvar(name, 2);
 }
 

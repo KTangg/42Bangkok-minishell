@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/20 15:08:32 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 08:57:30 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,15 @@ static void	sig_handle(int signo, siginfo_t *info, void *other)
 // Exiting Shell via CTRL + D
 void	shell_exit(void)
 {
+	int	fork;
+
+	fork = g_msvars->fork;
 	rl_clear_history();
 	close(g_msvars->dup_fd[0]);
 	close(g_msvars->dup_fd[1]);
 	ms_cleanup_global();
-	ft_putendl_fd("exit", STDERR_FILENO);
+	if (!fork)
+		ft_putendl_fd("exit", STDERR_FILENO);
 	exit(EXIT_SUCCESS);
 }
 
@@ -97,7 +101,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(line);
 			g_msvars->status = 1;
-			shell_line(line);
+			g_msvars->exit_status = shell_line(line);
 		}
 		clear_variable(line, prompt);
 	}

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 09:40:40 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 17:18:45 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 08:40:11 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ int	isquoting(char c, t_parexcp *p)
 	return (0);
 }
 
-int	validvarn(char c, int pos)
+int	validvarn(char c, int pos, int set)
 {
+	if (set == 0 && c == '?' && pos == 0)
+		return (1);
 	if (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c == '_'))
 	{
 		if (pos == 0)

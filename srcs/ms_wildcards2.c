@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 20:47:19 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 23:51:10 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 08:11:18 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	get_patt_head(t_searched **pool, char *cmd, int *offset)
 		while (pool[i])
 		{
 			if (pool[i]->viable == 1)
-				if (pool[i]->str[pool[i]->searched + j] != cmd[j])
+				if (pool[i]->str[pool[i]->searched] != cmd[j])
 					pool[i]->viable = 0;
 			pool[i]->searched++;
 			i++;
