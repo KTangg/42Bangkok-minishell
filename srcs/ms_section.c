@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_section.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:37:14 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/21 07:32:35 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:09:11 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	add_pipe(t_command *cmd_list, t_command *last_pipe)
 	cmd_list->redirection = cursor->redirection;
 }
 
-static t_command	*section_command(t_command *cmd_list)
+t_command	*section_command(t_command *cmd_list)
 {
 	t_command	*cursor;
 	t_command	*next;
@@ -73,49 +73,40 @@ static t_command	*section_command(t_command *cmd_list)
 	return (cmd_list);
 }
 
-bool	section_execute(t_command *cmd_section)
+int	section_execute(t_command *cmd_section)
 {
 	int		status;
-	int		exit;
 
-	exit = 0;
 	if (cmd_section->next_pipe != NULL)
 		status = redir_pipe(cmd_section->next_pipe, cmd_section);
+	else if (cmd_section->next_pipe == NULL)
+		status = redir_execute(cmd_section);
 	else if (!cmd_section->output && !cmd_section->input)
 		status = execute_final(cmd_section);
-	else
-	{
-		if (!ft_strcmp(*cmd_section->command, "exit"))
-			exit = 1;
-		status = redir_execute(cmd_section);
-		if (exit)
-			shell_exit();
-	}
 	return (status);
 }
 
-bool	section_list(t_command *cmd_list)
+int	section_list(t_command *cmd_section)
 {
 	int			status;
-	t_command	*cmd_section;
 
 	status = 1;
-	cmd_section = section_command(cmd_list);
-	cmd_section = reverse_command(cmd_section);
 	while (cmd_section != NULL)
 	{
 		if (cmd_section->redirection == REOR)
 		{
-			if (status == 0)
+			if (status != EXIT_SUCCESS)
 				status = section_execute(cmd_section);
 		}
 		else if (cmd_section->redirection == REAND)
 		{
-			if (status == 1)
+			if (status == EXIT_SUCCESS)
 				status = section_execute(cmd_section);
 		}
 		else
 			status = section_execute(cmd_section);
+		if (status == EXIT_EXIT)
+			break ;
 		cmd_section = cmd_section->next;
 	}
 	return (status);

@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:17:40 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/12 16:40:35 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:09:03 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 extern t_ms_vars	*g_msvars;
 
-static bool	right_pipe_execute(t_command *command_line, int *pipefd, pid_t pid)
+static int	right_pipe_execute(t_command *command_line, int *pipefd, pid_t pid)
 {
-	bool	status;
+	int	status;
 
 	if (command_line->input == NULL)
 		dup2(pipefd[0], STDIN_FILENO);
@@ -26,6 +26,8 @@ static bool	right_pipe_execute(t_command *command_line, int *pipefd, pid_t pid)
 	waitpid(pid, NULL, 0);
 	status = redir_execute(command_line);
 	dup2(g_msvars->dup_fd[0], STDIN_FILENO);
+	if (status == EXIT_EXIT)
+		status = EXIT_SUCCESS;
 	return (status);
 }
 
@@ -39,7 +41,7 @@ static void	left_pipe_execute(t_command *command_line, int *pipefd)
 	exit(EXIT_SUCCESS);
 }
 
-static bool	pipe_execute(t_command *left_cmd, t_command *right_cmd)
+static int	pipe_execute(t_command *left_cmd, t_command *right_cmd)
 {
 	pid_t	pid;
 	int		pipefd[2];
@@ -47,13 +49,13 @@ static bool	pipe_execute(t_command *left_cmd, t_command *right_cmd)
 	if (pipe(pipefd) != 0)
 	{
 		perror("pipe");
-		return (false);
+		return (PIPE_FAIL);
 	}
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
-		return (false);
+		return (FORK_FAIL);
 	}
 	if (pid == 0)
 	{
@@ -63,7 +65,7 @@ static bool	pipe_execute(t_command *left_cmd, t_command *right_cmd)
 	return (right_pipe_execute(right_cmd, pipefd, pid));
 }
 
-bool	redir_pipe(t_command *left_cmd, t_command *right_cmd)
+int	redir_pipe(t_command *left_cmd, t_command *right_cmd)
 {
 	int		status;
 	pid_t	pid;
@@ -72,18 +74,14 @@ bool	redir_pipe(t_command *left_cmd, t_command *right_cmd)
 	if (pid == -1)
 	{
 		perror("fork");
-		return (false);
+		return (FORK_FAIL);
 	}
 	if (pid == 0)
 	{
 		g_msvars->fork++;
 		status = pipe_execute(left_cmd, right_cmd);
-		if (status == false)
-			exit(EXIT_FAILURE);
-		exit(EXIT_SUCCESS);
+		exit(status);
 	}
 	waitpid(pid, &status, 0);
-	if (status == false)
-		return (true);
-	return (false);
+	return (WEXITSTATUS(status));
 }

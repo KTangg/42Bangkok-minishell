@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 08:34:30 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 10:56:34 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <unistd.h>
-# include <stdbool.h>
 # include <termios.h>
 # include <dirent.h>
 # include <sys/types.h>
@@ -35,6 +34,14 @@
 # define REAND 6
 # define REOR 7
 # define HERE_DOCFILE "here_doc.txt"
+
+// Define Exit Status
+# define EXIT_EXIT 2
+# define FORK_FAIL 3
+# define PIPE_FAIL 4
+# define FILE_FAIL 5
+# define CMD_NOT_FOUND 127
+# define EXIT_SIGINT 130
 
 // Outmode: 0 - Do nothing; 1 - '>' to file; 2 - '>>' to file;
 // Inmode: 0 - Do nothing; 1 - '<' read from file; 2 - '<<' Here Document
@@ -87,13 +94,13 @@ char		*getprompt(void);
 void		shell_exit(void);
 
 // Line Process Prototype
-bool		shell_line(char *line);
+int			shell_line(char *line);
 
 // Execute Process Prototype
-bool		recursive_exec(char *line);
-bool		execute_execve(char *argv[]);
-bool		redir_execute(t_command *command_line);
-bool		execute_final(t_command *command_line);
+int			recursive_exec(char *line);
+int			execute_execve(char *argv[]);
+int			redir_execute(t_command *command_line);
+int			execute_final(t_command *command_line);
 
 // Split Process Prototype
 t_ms_vars	*init_global(char **envp);
@@ -155,7 +162,9 @@ int			cmd_pwd(char **argv);
 int			cmd_ls(char **argv);
 
 // Exec Helper
-bool		check_execute(t_command *command_line);
+void		set_directory(int *pipefd);
+void		sent_directory(int *pipefd);
+int			check_execute(t_command *command_line);
 t_command	*reverse_command(t_command *command_line);
 t_redirect	*reverse_redirect(t_redirect *redirect);
 
@@ -166,16 +175,11 @@ int			redir_inp(char *path);
 int			here_document(char *end);
 
 // Pipe | Operation Prototype
-bool		redir_pipe(t_command *left_cmd, t_command *right_cmd);
-
-// And && Operation Prototype
-bool		redir_and(t_command *left_cmd, t_command *right_cmd);
-
-// Or || Operation Prototype
-bool		redir_or(t_command *left_cmd, t_command *right_cmd);
+int			redir_pipe(t_command *left_cmd, t_command *right_cmd);
 
 // Section Command Prototype
-bool		section_execute(t_command *cmd_section);
-bool		section_list(t_command *cmd_list);
+int			section_execute(t_command *cmd_section);
+int			section_list(t_command *cmd_list);
+t_command	*section_command(t_command *cmd_list);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:12:32 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 08:35:37 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:01:25 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,21 @@ static void	free_command(char **command)
 	free(command);
 }
 
+static void	free_redir(t_redirect *redir)
+{
+	t_redirect	*tmp;
+
+	tmp = redir;
+	while (tmp != NULL)
+	{
+		if (tmp->file != NULL)
+			free(tmp->file);
+		redir = redir->next;
+		free(tmp);
+		tmp = redir;
+	}
+}
+
 static void	free_pipe(t_command *pipe_list)
 {
 	t_command	*tmp;
@@ -35,6 +50,8 @@ static void	free_pipe(t_command *pipe_list)
 	while (tmp != NULL)
 	{
 		free_command(tmp->command);
+		free_redir(tmp->input);
+		free_redir(tmp->output);
 		next = tmp->next_pipe;
 		free(tmp);
 		tmp = next;
@@ -50,6 +67,8 @@ static void	free_cmd_list(t_command	*cmd_list)
 	while (tmp != NULL)
 	{
 		free_command(tmp->command);
+		free_redir(tmp->input);
+		free_redir(tmp->output);
 		if (tmp->next_pipe != NULL)
 			free_pipe(tmp->next_pipe);
 		next = tmp->next;
@@ -58,12 +77,12 @@ static void	free_cmd_list(t_command	*cmd_list)
 	}
 }
 
-bool	shell_line(char *line)
+int	shell_line(char *line)
 {
-	bool		status;
+	int			status;
 	t_command	*cmd_list;
 
-	status = false;
+	status = EXIT_FAILURE;
 	cmd_list = parse_seqcmds(line);
 	free(line);
 	if (!cmd_list)
@@ -72,6 +91,8 @@ bool	shell_line(char *line)
 		print_cmdlst(cmd_list);
 	else
 	{
+		cmd_list = section_command(cmd_list);
+		cmd_list = reverse_command(cmd_list);
 		status = section_list(cmd_list);
 		free_cmd_list(cmd_list);
 	}

@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 08:40:10 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:11:26 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ int	main(int argc, char *argv[], char *envp[])
 			add_history(line);
 			g_msvars->status = 1;
 			g_msvars->exit_status = shell_line(line);
+			if (g_msvars->exit_status == EXIT_EXIT)
+				shell_exit();
 		}
 	}
 }

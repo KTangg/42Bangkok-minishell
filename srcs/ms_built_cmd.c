@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_built_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 17:38:26 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/09 06:25:24 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:10:17 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,6 @@ int	cmd_cd(char **argv)
 
 int	cmd_exit(char **argv)
 {
-	if (argv[1])
-	{
-		built_printerr(argv[0], argv[1]);
-		return (-1);
-	}
-	else
-		shell_exit();
-	return (0);
+	(void)argv;
+	exit(EXIT_EXIT);
 }
