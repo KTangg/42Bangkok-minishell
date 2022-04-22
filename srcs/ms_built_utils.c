@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_built_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 16:19:08 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 07:53:45 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 12:53:46 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ int	is_builtin(char **cmdchain)
 		return (1);
 	else if (!ft_strcmp("exit", cmd))
 		return (1);
-	else if (!ft_strcmp("ls", cmd))
-		return (1);
 	return (0);
 }
 
@@ -63,8 +61,6 @@ int	execute_built(char **argv)
 		return (cmd_pwd(argv));
 	else if (!ft_strcmp("exit", argv[0]))
 		return (cmd_exit(argv));
-	else if (!ft_strcmp("ls", argv[0]))
-		return (cmd_ls(argv));
 	return (1);
 }
 
@@ -108,7 +104,7 @@ int	check_varn(char *name)
 	i = 0;
 	while (name[i])
 	{
-		if (!validvarn(name[i], i))
+		if (!validvarn(name[i], i, 0))
 			return (0);
 		i++;
 	}
