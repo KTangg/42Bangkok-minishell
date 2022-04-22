@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_main_line.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 14:12:32 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/21 08:57:21 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 08:35:37 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-pid_t	g_pid = 1;
-int		g_wstatus = 0;
 extern t_ms_vars	*g_msvars;
 
 static void	free_command(char **command)
@@ -67,6 +65,7 @@ bool	shell_line(char *line)
 
 	status = false;
 	cmd_list = parse_seqcmds(line);
+	free(line);
 	if (!cmd_list)
 		return (status);
 	if (getvar("DEBUG_MODE") && !ft_strcmp(getvar("DEBUG_MODE"), "1"))
