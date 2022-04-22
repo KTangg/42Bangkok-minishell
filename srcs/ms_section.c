@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:37:14 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 12:35:18 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 13:12:28 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,12 @@ t_command	*section_command(t_command *cmd_list)
 
 int	section_execute(t_command *cmd_section)
 {
-	int		status;
-
 	if (cmd_section->next_pipe != NULL)
-		status = redir_pipe(cmd_section->next_pipe, cmd_section);
+		return (redir_pipe(cmd_section->next_pipe, cmd_section));
 	else if (cmd_section->recursive == 1 || !is_builtin(cmd_section->command))
-		status = redir_execute(cmd_section);
+		return (redir_execute(cmd_section));
 	else
-		status = execute_final(cmd_section);
-	return (status);
+		return (execute_final(cmd_section));
 }
 
 int	section_list(t_command *cmd_section)

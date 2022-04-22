@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:11:24 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 12:35:14 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 13:15:24 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,16 @@ int	redir_execute(t_command *command_line)
 int	execute_final(t_command *command_line)
 {
 	int		status;
+	int		fd[2];
 
 	if (command_line == NULL)
 		return (EXIT_FAILURE);
 	if (*command_line->command == NULL)
 		return (EXIT_SUCCESS);
+	fd[0] = dup(STDIN_FILENO);
+	fd[1] = dup(STDOUT_FILENO);
 	status = redir_command(command_line);
+	dup2(fd[0], STDIN_FILENO);
+	dup2(fd[1], STDOUT_FILENO);
 	return (status);
 }
