@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 17:38:26 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/22 11:10:17 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 13:15:37 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ int	cmd_echo(char **argv, char **envp)
 	i = 1;
 	nonl = 0;
 	if (!argv[1])
+	{
 		printf("\n");
-	if (!argv[1])
 		return (0);
+	}
 	if (!ft_strcmp(argv[1], "-n"))
 		nonl = 1;
 	if (!argv[2] && nonl == 1)

@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 18:04:16 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 12:34:30 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 13:15:32 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	free_path_env(char **path_env)
 static char	**get_path_env(void)
 {
 	t_vars	*cursor;
-	char	**path_env;
 
 	if (g_msvars->env_lst == NULL)
 	{
@@ -52,8 +51,8 @@ static char	**get_path_env(void)
 		cursor = cursor->next;
 	}
 	if (cursor != NULL)
-		path_env = ft_split(cursor->value, ':');
-	return (path_env);
+		return (ft_split(cursor->value, ':'));
+	return (NULL);
 }
 
 // Join path with the command
