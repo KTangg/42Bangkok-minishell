@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_main_input.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:39:27 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/08 22:19:37 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 13:19:52 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ char	*getprompt(void)
 	getcwd(cwd, 1000);
 	ft_strlcpy(prompt, "\e[1;31m", 1000);
 	ft_strlcat(prompt, getenv("USER"), 1000);
-	ft_strlcat(prompt, "@", 1000);
-	ft_strlcat(prompt, getenv("NAME"), 1000);
-	ft_strlcat(prompt, "\e[0m", 1000);
 	ft_strlcat(prompt, ":", 1000);
 	ft_strlcat(prompt, "\e[1;35m", 1000);
 	if (!ft_strncmp(cwd, getenv("HOME"), ft_strlen(getenv("HOME"))))

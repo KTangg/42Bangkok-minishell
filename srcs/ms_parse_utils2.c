@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_parse_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 09:40:40 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 08:40:11 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 13:18:04 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,5 @@ static void	lst_relist(char **oldlst, char **newlst, int pos, int size)
 	pos++;
 	while (oldlst[pos])
 		newlst[i++] = oldlst[pos++];
-	newlst[i] = '\0';
+	newlst[i] = NULL;
 }
