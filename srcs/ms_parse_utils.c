@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 00:03:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 18:54:58 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 19:07:53 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,17 @@ static int	getargc(const char *line, int len)
 {
 	int			i;
 	int			argc;
-	t_parexcp	parexcp;
+	t_parexcp	par;
 
 	i = 0;
 	argc = 0;
-	parexcp.sq_open = 0;
-	parexcp.dq_open = 0;
-	parexcp.p_open = 0;
-	parexcp.any_open = 0;
+	par.sq_open = 0;
+	par.dq_open = 0;
+	par.p_open = 0;
+	par.any_open = 0;
 	while (line[i] && i < len)
 	{
-		if (isquoting(line[i], &parexcp))
-			;
-		else if (line[i] == ' ' && !parexcp.any_open)
+		if (!isquoting(line[i], &par) && line[i] == ' ' && !par.any_open)
 		{
 			while (line[i + 1] == ' ')
 				i++;

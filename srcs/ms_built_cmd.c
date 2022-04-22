@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_built_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 17:38:26 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/22 13:15:37 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 18:13:18 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ int	cmd_echo(char **argv, char **envp)
 	(void)envp;
 	i = 1;
 	nonl = 0;
-	if (!argv[1])
-	{
+	if (!argv[i])
 		printf("\n");
+	if (!argv[i])
 		return (0);
-	}
-	if (!ft_strcmp(argv[1], "-n"))
-		nonl = 1;
+	if (!ft_strcmp(argv[i], "-n"))
+		nonl = !!(i++);
 	if (!argv[2] && nonl == 1)
 		printf("\n");
 	if (!argv[2] && nonl == 1)
@@ -110,6 +109,14 @@ int	cmd_cd(char **argv)
 
 int	cmd_exit(char **argv)
 {
-	(void)argv;
+	char	*shell;
+
+	if (argv[1] && argv[2])
+	{
+		shell = getshell();
+		ft_putstr_fd(shell, 2);
+		ft_putstr_fd(": exit: too many arguments\n", 2);
+		free(shell);
+	}
 	exit(EXIT_EXIT);
 }

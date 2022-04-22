@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/22 13:04:15 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 18:35:22 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void		add_environ(char *index, char *value, int size);
 void		cmd_varerr(char *cmd, char *arg);
 void		strip_quote(char **cmdlist);
 void		print_wilderr(const char *str);
+void		move_filecmd(t_command *cur, t_command *target);
 char		*expand_var(char *line);
 char		*getvar(char *index);
 char		**get_wild(char **cmdchain);

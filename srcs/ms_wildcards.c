@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:25:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 13:29:04 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 18:50:44 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int	check_wild(char *cmd)
 	t_parexcp	parexcp;
 
 	init_parexcp(&parexcp);
+	if (!cmd)
+		return (0);
 	while (*cmd)
 	{
 		isquoting(*cmd, &parexcp);

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 16:40:36 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/20 18:41:29 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 18:21:09 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	strip_quote(char **cmdlist)
 
 	i = 0;
 	stripped = 0;
+	if (!cmdlist || !*cmdlist || !(**cmdlist))
+		return ;
 	while (cmdlist[i])
 	{
 		stripped = getquotesnum(cmdlist[i]);
@@ -41,6 +43,8 @@ char	*strip_cmd(char *cmd)
 	int		stripped;
 	char	*newcmd;
 
+	if (!cmd)
+		return (cmd);
 	stripped = 0;
 	stripped = getquotesnum(cmd);
 	if (stripped > 0)
