@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 18:04:16 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 09:57:23 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:41:17 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ static char	*check_path(char *cmd)
 	char	**path_env;
 	size_t	i;
 
+	if (!access(cmd, F_OK) && !access(cmd, X_OK))
+		return (ft_strdup(cmd));
 	path_env = get_path_env();
 	i = 0;
 	while (path_env[i] != NULL)
@@ -100,10 +102,10 @@ static char	*check_path(char *cmd)
 		}
 		free(path);
 	}
-	ft_putstr_fd(cmd, STDERR_FILENO);
-	ft_putendl_fd(": command not found", STDERR_FILENO);
 	if (path_env != NULL)
 		free_path_env(path_env);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putendl_fd(": command not found", STDERR_FILENO);
 	return (NULL);
 }
 
