@@ -6,11 +6,13 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 09:12:11 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/06 09:12:57 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 14:03:08 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern t_ms_vars	*g_msvars;
 
 void	setshell(char *name)
 {
@@ -50,4 +52,19 @@ char	*getshell(void)
 		free(path[i--]);
 	free(path);
 	return (output);
+}
+
+void	set_shlvl(void)
+{
+	int		lvl;
+	char	*lvlvar;
+
+	lvlvar = getvar("SHLVL");
+	if (!lvlvar)
+		return ;
+	lvl = ft_atoi(lvlvar);
+	lvl++;
+	lvlvar = ft_itoa(lvl);
+	setvar("SHLVL", lvlvar, g_msvars->env_lst);
+	free(lvlvar);
 }

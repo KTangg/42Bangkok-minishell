@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/22 10:56:34 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 11:14:59 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void		ms_cleanup_global(void);
 void		init_cmd(t_command *cmd);
 void		clean_cmdfiles(t_redirect *target);
 void		built_printerr(char *cmd, char *arg);
+void		set_shlvl(void);
 char		**split_args(const char *line, int len);
 char		**lst_delcmd(t_command *cmdlist, char *cmd);
 char		*getshell(void);
@@ -142,6 +143,7 @@ char		**cmd_app(char **arr, char *str);
 char		*strip_cmd(char *cmd);
 char		**get_wild_any(void);
 char		**get_wild_patt(char *cmd);
+char		**expand_wild(char *cmd);
 int			validvarn(char c, int pos, int set);
 int			isvarset(char *cmd);
 int			getarrsize(char **arr);
