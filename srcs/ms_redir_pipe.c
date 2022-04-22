@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:17:40 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 11:09:03 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 12:35:16 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,7 @@ int	redir_pipe(t_command *left_cmd, t_command *right_cmd)
 		exit(status);
 	}
 	waitpid(pid, &status, 0);
+	if (WEXITSTATUS(status) == EXIT_EXIT)
+		return (EXIT_SUCCESS);
 	return (WEXITSTATUS(status));
 }

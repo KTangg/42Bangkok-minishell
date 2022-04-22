@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:11:24 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 11:15:12 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 12:35:14 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ int	redir_execute(t_command *command_line)
 	int		status;
 	int		pipefd[2];
 
+	if (command_line->command[0] == NULL)
+		return (EXIT_SUCCESS);
 	if (!ft_strcmp(command_line->command[0], "cd"))
 		if (pipe(pipefd) == -1)
 			return (PIPE_FAIL);

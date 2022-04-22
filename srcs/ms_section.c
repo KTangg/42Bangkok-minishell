@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 20:37:14 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 11:13:49 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 12:35:18 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int	section_execute(t_command *cmd_section)
 
 	if (cmd_section->next_pipe != NULL)
 		status = redir_pipe(cmd_section->next_pipe, cmd_section);
-	else if (cmd_section->next_pipe == NULL)
+	else if (cmd_section->recursive == 1 || !is_builtin(cmd_section->command))
 		status = redir_execute(cmd_section);
-	else if (!cmd_section->output && !cmd_section->input)
+	else
 		status = execute_final(cmd_section);
 	return (status);
 }

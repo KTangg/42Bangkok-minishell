@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:18:53 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 11:10:04 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 12:35:10 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int	recursive_exec(char *line)
 	{
 		g_msvars->fork++;
 		status = shell_line(line);
-		if (status == EXIT_EXIT)
-			status = EXIT_SUCCESS;
 		exit(status);
 	}
 	waitpid(pid, &status, 0);
+	if (WEXITSTATUS(status) == EXIT_EXIT)
+			return (EXIT_SUCCESS);
 	return (WEXITSTATUS(status));
 }
 

@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/22 11:14:59 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 12:30:48 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@
 # define HERE_DOCFILE "here_doc.txt"
 
 // Define Exit Status
-# define EXIT_EXIT 2
-# define FORK_FAIL 3
-# define PIPE_FAIL 4
-# define FILE_FAIL 5
+# define EXIT_EXIT 255
+# define FORK_FAIL 254
+# define PIPE_FAIL 253
+# define FILE_FAIL 252
 # define CMD_NOT_FOUND 127
 # define EXIT_SIGINT 130
 

@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 18:04:16 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 11:41:17 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/22 12:34:30 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	execute_execve(char *argv[])
 	if (pid == 0)
 	{
 		g_msvars->fork++;
-		execve(path, argv, NULL);
+		execve(path, argv, g_msvars->environ);
 		perror(path);
 		exit(EXIT_FAILURE);
 	}
