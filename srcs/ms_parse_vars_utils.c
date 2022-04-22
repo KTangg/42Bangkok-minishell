@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 09:12:11 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/21 13:57:39 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 14:03:08 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	set_shlvl(void)
 		return ;
 	lvl = ft_atoi(lvlvar);
 	lvl++;
-	free(lvlvar);
 	lvlvar = ft_itoa(lvl);
 	setvar("SHLVL", lvlvar, g_msvars->env_lst);
 	free(lvlvar);

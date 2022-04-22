@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:11:24 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/21 07:58:31 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/21 14:56:18 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ static int	get_fd_out(t_redirect *redirect)
 	{
 		if (fd != -1)
 			close(fd);
-		if (redirect->redirect == 1)
+		if (redirect->file == NULL)
+			fd = -1;
+		else if (redirect->redirect == 1)
 			fd = redir_out(redirect->file);
 		else if (redirect->redirect == 2)
 			fd = redir_app(redirect->file);
@@ -44,7 +46,9 @@ static int	get_fd_in(t_redirect *redirect)
 	{
 		if (fd != -1)
 			close(fd);
-		if (redirect->redirect == 1)
+		if (redirect->file == NULL)
+			fd = -1;
+		else if (redirect->redirect == 1)
 			fd = redir_inp(redirect->file);
 		else if (redirect->redirect == 2)
 			fd = here_document(redirect->file);
