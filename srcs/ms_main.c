@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
+/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 11:38:13 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/21 08:57:30 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/22 08:40:10 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ static void	sig_handle(int signo, siginfo_t *info, void *other)
 	(void)other;
 	if (signo == SIGINT)
 	{
+		g_msvars->exit_status = EXIT_SIGINT;
 		if (g_msvars->fork != 0)
-			exit(EXIT_FAILURE);
+			exit(EXIT_SIGINT);
 		printf("\n");
 		if (g_msvars->status == 0)
 		{
@@ -47,16 +48,19 @@ void	shell_exit(void)
 	close(g_msvars->dup_fd[0]);
 	close(g_msvars->dup_fd[1]);
 	ms_cleanup_global();
+	unlink(HERE_DOCFILE);
 	if (!fork)
 		ft_putendl_fd("exit", STDERR_FILENO);
 	exit(EXIT_SUCCESS);
 }
 
 // Initial terminal attribute && signal && some global variable
-static void	init_shell(struct termios term)
+static void	init_shell(struct termios term, int argc, char *argv[])
 {
 	struct sigaction	sa;
 
+	(void)argc;
+	(void)argv;
 	sa.sa_sigaction = sig_handle;
 	sa.sa_flags = SA_RESTART;
 	sigemptyset(&sa.sa_mask);
@@ -69,32 +73,22 @@ static void	init_shell(struct termios term)
 	g_msvars->dup_fd[1] = dup(STDOUT_FILENO);
 }
 
-static void	clear_variable(char *line, char *prompt)
-{
-	if (line)
-		free(line);
-	if (prompt)
-		free(prompt);
-	unlink(HERE_DOCFILE);
-}
-
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char *argv[], char *envp[])
 {
 	struct termios		term;
 	char				*line;
 	char				*prompt;
 
-	(void)argc;
-	(void)argv;
 	init_global(envp);
 	setshell(argv[0]);
 	tcgetattr(STDIN_FILENO, &term);
-	init_shell(term);
+	init_shell(term, argc, argv);
 	while (1)
 	{
 		prompt = getprompt();
 		g_msvars->status = 0;
 		line = readline(prompt);
+		free(prompt);
 		if (!line)
 			shell_exit();
 		if (line[0] != '\0')
@@ -103,6 +97,5 @@ int	main(int argc, char **argv, char **envp)
 			g_msvars->status = 1;
 			g_msvars->exit_status = shell_line(line);
 		}
-		clear_variable(line, prompt);
 	}
 }
