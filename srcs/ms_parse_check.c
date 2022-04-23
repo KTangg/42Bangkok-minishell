@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 08:46:16 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/23 17:11:12 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:55:39 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_command	*checkcmdlst(t_command *cmdlist)
 	while (cur)
 	{
 		i = 0;
-		valvarset(cur, (cur->next == NULL));
+		valvarset(cur, (cur->next == NULL || cur->redirection == REAND));
 		while ((cur->command)[i])
 		{
 			tmpcmd = cur->command[i];

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 06:16:12 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/22 18:48:04 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:47:26 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,15 @@ void	print_wilderr(const char *str)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd((char *)str, 2);
 	ft_putstr_fd(": ambiguous redirect\n", 2);
+	free(shell);
+}
+
+void	print_quoteerr(void)
+{
+	char	*shell;
+
+	shell = getshell();
+	ft_putstr_fd(shell, 2);
+	ft_putstr_fd(": invalid quotes\n", 2);
 	free(shell);
 }

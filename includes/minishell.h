@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/23 16:41:18 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:47:40 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ void		init_cmd(t_command *cmd);
 void		clean_cmdfiles(t_redirect *target);
 void		built_printerr(char *cmd, char *arg);
 void		set_shlvl(void);
+void		print_quoteerr(void);
 char		**split_args(const char *line, int len);
 char		**lst_delcmd(t_command *cmdlist, char *cmd);
 char		*getshell(void);

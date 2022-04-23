@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:37 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/23 16:15:04 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:56:43 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int					checkredir(const char *line, int len);
 static t_command	*split_redir(t_command *cmdlist, const char *line);
 static int			getredir(const char *line, int *offset);
+static int			checkquote(char *line);
 
 // Split
 t_command	*parse_seqcmds(char *line)
@@ -22,6 +23,8 @@ t_command	*parse_seqcmds(char *line)
 	t_command	*cmdlist;
 	int			len;
 
+	if (!checkquote(line))
+		return (NULL);
 	len = ft_strlen(line) - 1;
 	while (len >= 0)
 	{
@@ -42,6 +45,24 @@ t_command	*parse_seqcmds(char *line)
 	if (!cmdlist)
 		return (NULL);
 	return (checkcmdlst(cmdlist));
+}
+
+static int	checkquote(char *line)
+{
+	t_parexcp	parexcp;
+
+	init_parexcp(&parexcp);
+	while (*line)
+	{
+		isquoting(*line, &parexcp);
+		line++;
+	}
+	if (parexcp.any_open)
+	{
+		print_quoteerr();
+		return (0);
+	}
+	return (1);
 }
 
 static t_command	*split_redir(t_command *cmdlist, const char *line)
