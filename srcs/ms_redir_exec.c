@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:11:24 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 13:15:24 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:25:31 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,7 @@ int	redir_execute(t_command *command_line)
 {
 	pid_t	pid;
 	int		status;
-	int		pipefd[2];
 
-	if (command_line->command[0] == NULL)
-		return (EXIT_SUCCESS);
-	if (!ft_strcmp(command_line->command[0], "cd"))
-		if (pipe(pipefd) == -1)
-			return (PIPE_FAIL);
 	pid = fork();
 	if (pid == -1)
 		return (FORK_FAIL);
@@ -100,12 +94,8 @@ int	redir_execute(t_command *command_line)
 	{
 		g_msvars->fork++;
 		status = redir_command(command_line);
-		if (!ft_strcmp(command_line->command[0], "cd"))
-			sent_directory(pipefd);
 		exit(status);
 	}
-	if (!ft_strcmp(command_line->command[0], "cd"))
-		set_directory(pipefd);
 	waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));
 }
@@ -117,8 +107,6 @@ int	execute_final(t_command *command_line)
 
 	if (command_line == NULL)
 		return (EXIT_FAILURE);
-	if (*command_line->command == NULL)
-		return (EXIT_SUCCESS);
 	fd[0] = dup(STDIN_FILENO);
 	fd[1] = dup(STDOUT_FILENO);
 	status = redir_command(command_line);

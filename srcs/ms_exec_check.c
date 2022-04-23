@@ -6,7 +6,7 @@
 /*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:18:53 by spoolpra          #+#    #+#             */
-/*   Updated: 2022/04/22 12:35:10 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:22:42 by spoolpra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	recursive_exec(char *line)
 	}
 	waitpid(pid, &status, 0);
 	if (WEXITSTATUS(status) == EXIT_EXIT)
-			return (EXIT_SUCCESS);
+		return (EXIT_SUCCESS);
 	return (WEXITSTATUS(status));
 }
 
@@ -41,6 +41,8 @@ int	check_execute(t_command *command_line)
 		return (EXIT_FAILURE);
 	if (command_line->recursive == 1)
 		return (recursive_exec(command_line->command[0]));
+	else if (command_line->command[0] == NULL)
+		return (EXIT_SUCCESS);
 	else
 	{
 		if (is_builtin(command_line->command))
