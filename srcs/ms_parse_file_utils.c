@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:33:29 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/23 16:54:21 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:35:29 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ static char	*checkfilewild(char *cmd, int *iswild)
 	{
 		output = filelist[0];
 		free(filelist);
+		*iswild = 0;
 		return (output);
 	}
 	while (i < size)
