@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:33:29 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/23 09:04:30 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/23 16:54:21 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ static void	lst_insfout(t_command *target, t_command *cur)
 			target->output->redirect = 1;
 		else if (cur->redirection == 3 && target)
 			target->output->redirect = 2;
-		target->output->next = cur->output;
+		target->output->next = NULL;
+		if (target != cur)
+			target->output->next = cur->output;
 	}
 	if (cur->input)
 		target->input = cur->input;
@@ -75,18 +77,18 @@ static void	lst_insiout(t_command *target, t_command *cur)
 	{
 		target->input = (t_redirect *)malloc(sizeof(t_redirect));
 		if (iswild)
-		{
 			target->output->file = wild;
-			if (wild == NULL)
-				print_wilderr(*(cur->command));
-		}
+		if (iswild && wild == NULL)
+			print_wilderr(*(cur->command));
 		else
 			target->input->file = ft_strdup(cur->command[0]);
 		if (cur->redirection == 1 && target)
 			target->input->redirect = 1;
 		else if (cur->redirection == 4 && target)
 			target->input->redirect = 2;
-		target->input->next = cur->input;
+		target->input->next = NULL;
+		if (target != cur)
+			target->input->next = cur->input;
 	}
 	if (cur->output)
 		target->output = cur->output;

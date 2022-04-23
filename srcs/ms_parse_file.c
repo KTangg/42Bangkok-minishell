@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/08 14:26:57 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/22 18:50:28 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:13:11 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur)
 	t_command	*target;
 
 	prev = cmdlst;
+	if (cur->next == NULL)
+		return (lst_nocmdfile(cur));
 	target = cur->next;
 	if (prev != cur)
 		while (prev->next != cur)
@@ -33,12 +35,39 @@ t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur)
 	if (prev != cur)
 		prev->next = target;
 	free(cur->command);
-	if (cur == prev)
+	if (cur == prev || cur == cmdlst)
 	{
 		free(cur);
 		return (target);
 	}
 	return (cmdlst);
+}
+
+t_command	*lst_nocmdfile(t_command *cur)
+{
+	int		size;
+	char	**temp;
+	int		i;
+
+	move_filecmd(cur, cur);
+	size = getarrsize(cur->command);
+	if (size > 1)
+	{
+		free(cur->command[0]);
+		i = -1;
+		temp = (char **)malloc(size * sizeof(char *));
+		while (++i < size - 1)
+			temp[i] = cur->command[i + 1];
+		temp[i] = NULL;
+		free(cur->command);
+		cur->command = temp;
+	}
+	else
+	{
+		free(cur->command[0]);
+		cur->command[0] = NULL;
+	}
+	return (cur);
 }
 
 static void	lst_cmdapp(t_command *cmd, char **toapp)

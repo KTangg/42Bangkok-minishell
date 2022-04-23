@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 18:52:48 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/22 18:35:22 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/04/23 16:41:18 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <dirent.h>
 # include <sys/types.h>
 # include <sys/stat.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include "/usr/local/opt/readline/include/readline/readline.h"
+# include "/usr/local/opt/readline/include/readline/history.h"
 # include "libft.h"
 
 // Define Redirection Code
@@ -107,6 +107,7 @@ t_ms_vars	*init_global(char **envp);
 t_command	*parse_seqcmds(char *line);
 t_command	*checkcmdlst(t_command *cmdlist);
 t_command	*lst_cmdfile(t_command *cmdlst, t_command *cur);
+t_command	*lst_nocmdfile(t_command *cur);
 void		print_varlist(t_vars **lst);
 void		print_cmdlst(t_command *cmdlist);
 void		print_synterr(const char *str);

@@ -4,3 +4,4 @@ objs
 test*
 *.json
 a.out
+*.dSYM

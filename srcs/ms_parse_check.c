@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_parse_check.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spoolpra <spoolpra@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 08:46:16 by tratanat          #+#    #+#             */
-/*   Updated: 2022/04/22 12:38:40 by spoolpra         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:11:12 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,11 @@ static void	fin_cmdlist(t_command *cmdlist)
 	cur = cmdlist;
 	while (cur)
 	{
-		cur->command = get_wild(cur->command);
-		strip_quote(cur->command);
+		if (cur->command && *cur->command)
+		{
+			cur->command = get_wild(cur->command);
+			strip_quote(cur->command);
+		}
 		cur = cur->next;
 	}
 }
@@ -78,10 +81,13 @@ static t_command	*lst_checkfile(t_command *cmdlist)
 	newlist = cmdlist;
 	while (next != NULL)
 	{
-		next = next->next;
+		if (next->next != NULL)
+			next = next->next;
 		if (cur->redirection >= 1 && cur->redirection <= 4)
 			newlist = lst_cmdfile(newlist, cur);
 		cur = next;
+		if (next->next == NULL)
+			break ;
 	}
 	return (newlist);
 }

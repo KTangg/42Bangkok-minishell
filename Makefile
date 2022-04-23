@@ -6,7 +6,7 @@
 #    By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 14:53:45 by spoolpra          #+#    #+#              #
-#    Updated: 2022/04/22 18:35:43 by tratanat         ###   ########.fr        #
+#    Updated: 2022/04/23 16:02:07 by tratanat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,9 @@ RM = rm -rf
 SRC_DIR = srcs/
 OBJ_DIR = objs/
 LIB_DIR = libft/
+RDL_DIR = /usr/local/opt/readline/
 
-INCS = -Iincludes/ -I$(LIB_DIR)
+INCS = -Iincludes/ -I$(LIB_DIR) -I$(RDL_DIR)include/
 NAME = minishell
 SRCS = ms_main.c ms_main_input.c ms_main_line.c\
 		ms_parse.c ms_parse_utils.c ms_parse_utils2.c ms_vars.c ms_parse_vars.c \
@@ -35,7 +36,7 @@ all: $(NAME)
 
 $(NAME): $(addprefix $(OBJ_DIR),$(OBJS))
 	$(MAKE) -C $(LIB_DIR)
-	$(CC) $(INCS) $^ -o $(NAME) -lreadline -L$(LIB_DIR) -lft
+	$(CC) $(INCS) $^ -o $(NAME) -L$(RDL_DIR)lib/ -lreadline -L$(LIB_DIR) -lft
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< $(INCS) -o $@
